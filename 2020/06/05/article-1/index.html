@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+
+  
+  <title>Python async/await | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="python web 开发 经验知识分享api请求异步处理 之 async&#x2F;await 协程实现&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;之前我们使用 yield 关键字实现了异步处理，现在我们可以更走远一点，直接用 async&#x2F;await 这组关键字实现协程。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;协程的定义这里就不再赘述了，这种利用单线程交替处理逻辑的设计，良好的弥补了pytho">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python async&#x2F;await">
+<meta property="og:url" content="http://yoursite.com/2020/06/05/article-1/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="python web 开发 经验知识分享api请求异步处理 之 async&#x2F;await 协程实现&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;之前我们使用 yield 关键字实现了异步处理，现在我们可以更走远一点，直接用 async&#x2F;await 这组关键字实现协程。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;协程的定义这里就不再赘述了，这种利用单线程交替处理逻辑的设计，良好的弥补了pytho">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-06-05T02:44:12.615Z">
+<meta property="article:modified_time" content="2020-06-05T03:18:49.887Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-article-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/05/article-1/" class="article-date">
+  <time datetime="2020-06-05T02:44:12.615Z" itemprop="datePublished">2020-06-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python async/await
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="python-web-开发-经验知识分享"><a href="#python-web-开发-经验知识分享" class="headerlink" title="python web 开发 经验知识分享"></a>python web 开发 经验知识分享</h3><h3 id="api请求异步处理-之-async-await-协程实现"><a href="#api请求异步处理-之-async-await-协程实现" class="headerlink" title="api请求异步处理 之 async/await 协程实现"></a>api请求异步处理 之 async/await 协程实现</h3><h5 id="nbsp-nbsp-nbsp-nbsp-之前我们使用-yield-关键字实现了异步处理，现在我们可以更走远一点，直接用-async-await-这组关键字实现协程。"><a href="#nbsp-nbsp-nbsp-nbsp-之前我们使用-yield-关键字实现了异步处理，现在我们可以更走远一点，直接用-async-await-这组关键字实现协程。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;之前我们使用 yield 关键字实现了异步处理，现在我们可以更走远一点，直接用 async/await 这组关键字实现协程。"></a>&nbsp;&nbsp;&nbsp;&nbsp;之前我们使用 yield 关键字实现了异步处理，现在我们可以更走远一点，直接用 async/await 这组关键字实现协程。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-协程的定义这里就不再赘述了，这种利用单线程交替处理逻辑的设计，良好的弥补了python线程锁带来的线程性能问题。在涉及到要使用python处理并发事务的时候，我个人强烈推荐使用进程-协程的设计模式，虽然仍旧没法提升计算密集型逻辑的处理时间，但I-O密集型逻辑的处理性能可大大提升。"><a href="#nbsp-nbsp-nbsp-nbsp-协程的定义这里就不再赘述了，这种利用单线程交替处理逻辑的设计，良好的弥补了python线程锁带来的线程性能问题。在涉及到要使用python处理并发事务的时候，我个人强烈推荐使用进程-协程的设计模式，虽然仍旧没法提升计算密集型逻辑的处理时间，但I-O密集型逻辑的处理性能可大大提升。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;协程的定义这里就不再赘述了，这种利用单线程交替处理逻辑的设计，良好的弥补了python线程锁带来的线程性能问题。在涉及到要使用python处理并发事务的时候，我个人强烈推荐使用进程+协程的设计模式，虽然仍旧没法提升计算密集型逻辑的处理时间，但I/O密集型逻辑的处理性能可大大提升。"></a>&nbsp;&nbsp;&nbsp;&nbsp;协程的定义这里就不再赘述了，这种利用单线程交替处理逻辑的设计，良好的弥补了python线程锁带来的线程性能问题。在涉及到要使用python处理并发事务的时候，我个人强烈推荐使用进程+协程的设计模式，虽然仍旧没法提升计算密集型逻辑的处理时间，但I/O密集型逻辑的处理性能可大大提升。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-废话不多说，上代码："><a href="#nbsp-nbsp-nbsp-nbsp-废话不多说，上代码：" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;废话不多说，上代码："></a>&nbsp;&nbsp;&nbsp;&nbsp;废话不多说，上代码：</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">async_func1</span><span class="params">()</span>:</span></span><br><span class="line">    work1 = <span class="string">"do something 1"</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">2</span>)</span><br><span class="line">    print(work1)</span><br><span class="line"></span><br><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">async_func2</span><span class="params">()</span>:</span></span><br><span class="line">    work2 = <span class="string">"do something 2"</span></span><br><span class="line">    print(work2)</span><br></pre></td></tr></table></figure>
+<h5 id="nbsp-nbsp-nbsp-nbsp-我们-import-了-asyncio-模块，并定义了-async-func1-与-async-func2-两个函数，使用-async-关键字将他们包起来（就算不导入asyncio模块，你也可以使用async-await，这是python-3-4添加的新关键字）。async-func1中，我们在work1执行前加入了两秒的sleep时间，来代表work1的执行需要两秒完成。"><a href="#nbsp-nbsp-nbsp-nbsp-我们-import-了-asyncio-模块，并定义了-async-func1-与-async-func2-两个函数，使用-async-关键字将他们包起来（就算不导入asyncio模块，你也可以使用async-await，这是python-3-4添加的新关键字）。async-func1中，我们在work1执行前加入了两秒的sleep时间，来代表work1的执行需要两秒完成。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;我们 import 了 asyncio 模块，并定义了 async_func1 与 async_func2 两个函数，使用 async 关键字将他们包起来（就算不导入asyncio模块，你也可以使用async/await，这是python 3.4添加的新关键字）。async_func1中，我们在work1执行前加入了两秒的sleep时间，来代表work1的执行需要两秒完成。"></a>&nbsp;&nbsp;&nbsp;&nbsp;我们 import 了 asyncio 模块，并定义了 async_func1 与 async_func2 两个函数，使用 async 关键字将他们包起来（就算不导入asyncio模块，你也可以使用async/await，这是python 3.4添加的新关键字）。async_func1中，我们在work1执行前加入了两秒的sleep时间，来代表work1的执行需要两秒完成。</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    ioloop = asyncio.get_event_loop()</span><br><span class="line">    tasks = [ioloop.create_task(async_func1()),</span><br><span class="line">            ioloop.create_task(async_func2())]</span><br></pre></td></tr></table></figure>
+<h5 id="nbsp-nbsp-nbsp-nbsp-接着我们使用asyncio中的get-event-loop方法，建立一个ioloop事件循环，它被用来添加并执行我们的async任务。create-task方法接收一个协程函数，并且将返回一个该函数的实例。"><a href="#nbsp-nbsp-nbsp-nbsp-接着我们使用asyncio中的get-event-loop方法，建立一个ioloop事件循环，它被用来添加并执行我们的async任务。create-task方法接收一个协程函数，并且将返回一个该函数的实例。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;接着我们使用asyncio中的get_event_loop方法，建立一个ioloop事件循环，它被用来添加并执行我们的async任务。create_task方法接收一个协程函数，并且将返回一个该函数的实例。"></a>&nbsp;&nbsp;&nbsp;&nbsp;接着我们使用asyncio中的get_event_loop方法，建立一个ioloop事件循环，它被用来添加并执行我们的async任务。create_task方法接收一个协程函数，并且将返回一个该函数的实例。</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ioloop.run_until_complete(asyncio.wait(tasks))</span><br><span class="line">ioloop.close()</span><br></pre></td></tr></table></figure>
+<h5 id="nbsp-nbsp-nbsp-nbsp-调用run-until-complete，asyncio-wait方法接收一个可迭代的对象，即我们之前建立的内部是两个协程对象实例的tasks列表。"><a href="#nbsp-nbsp-nbsp-nbsp-调用run-until-complete，asyncio-wait方法接收一个可迭代的对象，即我们之前建立的内部是两个协程对象实例的tasks列表。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;调用run_until_complete，asyncio.wait方法接收一个可迭代的对象，即我们之前建立的内部是两个协程对象实例的tasks列表。"></a>&nbsp;&nbsp;&nbsp;&nbsp;调用run_until_complete，asyncio.wait方法接收一个可迭代的对象，即我们之前建立的内部是两个协程对象实例的tasks列表。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-运行并查看结果："><a href="#nbsp-nbsp-nbsp-nbsp-运行并查看结果：" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;运行并查看结果："></a>&nbsp;&nbsp;&nbsp;&nbsp;运行并查看结果：</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">do something 2</span><br><span class="line">do something 1</span><br></pre></td></tr></table></figure>
+<h5 id="nbsp-nbsp-nbsp-nbsp-fun1-的-do-something-1-后于-func2-的-do-something-2-被打印，实际跑起来的时候也是先打印的-do-something-2，-两秒后打印-do-something-1，说明函数内部在遇到sleep这样的耗时任务时，我们的-await-关键字起了作用，告诉ioloop切换到另一个任务。在func2执行完，func1的sleep也完成后，整个ioloop结束并调用close方法关闭它。"><a href="#nbsp-nbsp-nbsp-nbsp-fun1-的-do-something-1-后于-func2-的-do-something-2-被打印，实际跑起来的时候也是先打印的-do-something-2，-两秒后打印-do-something-1，说明函数内部在遇到sleep这样的耗时任务时，我们的-await-关键字起了作用，告诉ioloop切换到另一个任务。在func2执行完，func1的sleep也完成后，整个ioloop结束并调用close方法关闭它。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;fun1 的 do something 1 后于 func2 的 do something 2 被打印，实际跑起来的时候也是先打印的 do something 2， 两秒后打印 do something 1，说明函数内部在遇到sleep这样的耗时任务时，我们的 await 关键字起了作用，告诉ioloop切换到另一个任务。在func2执行完，func1的sleep也完成后，整个ioloop结束并调用close方法关闭它。"></a>&nbsp;&nbsp;&nbsp;&nbsp;fun1 的 do something 1 后于 func2 的 do something 2 被打印，实际跑起来的时候也是先打印的 do something 2， 两秒后打印 do something 1，说明函数内部在遇到sleep这样的耗时任务时，我们的 await 关键字起了作用，告诉ioloop切换到另一个任务。在func2执行完，func1的sleep也完成后，整个ioloop结束并调用close方法关闭它。</h5>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/06/05/article-1/" data-id="ckb1n3l6q0000u87n13984uji" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2020/06/05/article/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Python yield 实战</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/06/05/article-1/">Python async/await</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/05/article/">Python yield 实战</a>
+          </li>
+        
+          <li>
+            <a href="/2020/06/04/hello-world/">python yield</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+
+  
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
