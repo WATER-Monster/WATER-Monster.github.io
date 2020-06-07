@@ -64,6 +64,45 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-article-2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/07/article-2/" class="article-date">
+  <time datetime="2020-06-07T05:53:21.823Z" itemprop="datePublished">2020-06-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/07/article-2/">Python Tornado 协程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="python-web-开发-经验知识分享"><a href="#python-web-开发-经验知识分享" class="headerlink" title="python web 开发 经验知识分享"></a>python web 开发 经验知识分享</h3><h3 id="api请求异步处理-之-Tornado-协程实现"><a href="#api请求异步处理-之-Tornado-协程实现" class="headerlink" title="api请求异步处理 之 Tornado 协程实现"></a>api请求异步处理 之 Tornado 协程实现</h3><h5 id="nbsp-nbsp-nbsp-nbsp-熟悉-Flask-的朋友都知道，Flask-框架在处理并发的时候基本是通过-gevent-这类库，通过-gevent-的-monkey-patch-all-将你的同步阻塞逻辑变成异步非阻塞。美中不足的是，gevent-库本身是存在一些缺陷和隐患的，gevent-将直接修改标准库中大部分的阻塞式调用，包括socket、ssl、threading、select等模块，变为协作式运行，但这些标准库可能会在复杂的业务逻辑下出现各种奇奇怪怪的bug。另外某些-python-的第三方库并不支持-gevent-的猴子补丁，那么在引用到这类库的时候就没法简单的用-monkey-patch-all-解决并发。"><a href="#nbsp-nbsp-nbsp-nbsp-熟悉-Flask-的朋友都知道，Flask-框架在处理并发的时候基本是通过-gevent-这类库，通过-gevent-的-monkey-patch-all-将你的同步阻塞逻辑变成异步非阻塞。美中不足的是，gevent-库本身是存在一些缺陷和隐患的，gevent-将直接修改标准库中大部分的阻塞式调用，包括socket、ssl、threading、select等模块，变为协作式运行，但这些标准库可能会在复杂的业务逻辑下出现各种奇奇怪怪的bug。另外某些-python-的第三方库并不支持-gevent-的猴子补丁，那么在引用到这类库的时候就没法简单的用-monkey-patch-all-解决并发。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;熟悉 Flask 的朋友都知道，Flask 框架在处理并发的时候基本是通过 gevent 这类库，通过 gevent 的 monkey.patch_all() 将你的同步阻塞逻辑变成异步非阻塞。美中不足的是，gevent 库本身是存在一些缺陷和隐患的，gevent 将直接修改标准库中大部分的阻塞式调用，包括socket、ssl、threading、select等模块，变为协作式运行，但这些标准库可能会在复杂的业务逻辑下出现各种奇奇怪怪的bug。另外某些 python 的第三方库并不支持 gevent 的猴子补丁，那么在引用到这类库的时候就没法简单的用 monkey.patch_all() 解决并发。"></a>&nbsp;&nbsp;&nbsp;&nbsp;熟悉 Flask 的朋友都知道，Flask 框架在处理并发的时候基本是通过 gevent 这类库，通过 gevent 的 monkey.patch_all() 将你的同步阻塞逻辑变成异步非阻塞。美中不足的是，gevent 库本身是存在一些缺陷和隐患的，gevent 将直接修改标准库中大部分的阻塞式调用，包括socket、ssl、threading、select等模块，变为协作式运行，但这些标准库可能会在复杂的业务逻辑下出现各种奇奇怪怪的bug。另外某些 python 的第三方库并不支持 gevent 的猴子补丁，那么在引用到这类库的时候就没法简单的用 monkey.patch_all() 解决并发。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-Tornado作为-python-性能最好的框架，在框架本身的层面上就直接支持协程式运作，这比-Flask-gevent-的方案要好不少，我们不必再去担心我们的标准库因为打了猴子补丁的原因变得难以使用。"><a href="#nbsp-nbsp-nbsp-nbsp-Tornado作为-python-性能最好的框架，在框架本身的层面上就直接支持协程式运作，这比-Flask-gevent-的方案要好不少，我们不必再去担心我们的标准库因为打了猴子补丁的原因变得难以使用。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;Tornado作为 python 性能最好的框架，在框架本身的层面上就直接支持协程式运作，这比 Flask + gevent 的方案要好不少，我们不必再去担心我们的标准库因为打了猴子补丁的原因变得难以使用。"></a>&nbsp;&nbsp;&nbsp;&nbsp;Tornado作为 python 性能最好的框架，在框架本身的层面上就直接支持协程式运作，这比 Flask + gevent 的方案要好不少，我们不必再去担心我们的标准库因为打了猴子补丁的原因变得难以使用。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-我们前面讲了-python-本身是如何使用协程异步处理多任务的，现在来看看-Tornado-是怎么做的。在官方文档中，我们可以读到，-Tornado-建议我们将需要做协程处理的方法以-gen-coroutine-装饰器包装起来，在需要挂起的耗时操作前加上-yield-关键字。在这时，每一个这样做了的请求对象都会被-Tornado-实例化为一个-task，并且会被注册到-Tornado-的-IOLoop-中去。在任意请求的代码走到-yield-时，Tornado-就会切换执行另一个请求，也就是说每个请求都会像我们之前讲过的协程任务-task-一样，被注册进-Tornado-IOLoop，请求和请求之间变成了协程运作，去共用一个线程资源。"><a href="#nbsp-nbsp-nbsp-nbsp-我们前面讲了-python-本身是如何使用协程异步处理多任务的，现在来看看-Tornado-是怎么做的。在官方文档中，我们可以读到，-Tornado-建议我们将需要做协程处理的方法以-gen-coroutine-装饰器包装起来，在需要挂起的耗时操作前加上-yield-关键字。在这时，每一个这样做了的请求对象都会被-Tornado-实例化为一个-task，并且会被注册到-Tornado-的-IOLoop-中去。在任意请求的代码走到-yield-时，Tornado-就会切换执行另一个请求，也就是说每个请求都会像我们之前讲过的协程任务-task-一样，被注册进-Tornado-IOLoop，请求和请求之间变成了协程运作，去共用一个线程资源。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;我们前面讲了 python 本身是如何使用协程异步处理多任务的，现在来看看 Tornado 是怎么做的。在官方文档中，我们可以读到， Tornado 建议我们将需要做协程处理的方法以 @gen.coroutine 装饰器包装起来，在需要挂起的耗时操作前加上 yield 关键字。在这时，每一个这样做了的请求对象都会被 Tornado 实例化为一个 task，并且会被注册到 Tornado 的 IOLoop 中去。在任意请求的代码走到 yield 时，Tornado 就会切换执行另一个请求，也就是说每个请求都会像我们之前讲过的协程任务 task 一样，被注册进 Tornado IOLoop，请求和请求之间变成了协程运作，去共用一个线程资源。"></a>&nbsp;&nbsp;&nbsp;&nbsp;我们前面讲了 python 本身是如何使用协程异步处理多任务的，现在来看看 Tornado 是怎么做的。在官方文档中，我们可以读到， Tornado 建议我们将需要做协程处理的方法以 @gen.coroutine 装饰器包装起来，在需要挂起的耗时操作前加上 yield 关键字。在这时，每一个这样做了的请求对象都会被 Tornado 实例化为一个 task，并且会被注册到 Tornado 的 IOLoop 中去。在任意请求的代码走到 yield 时，Tornado 就会切换执行另一个请求，也就是说每个请求都会像我们之前讲过的协程任务 task 一样，被注册进 Tornado IOLoop，请求和请求之间变成了协程运作，去共用一个线程资源。</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Customer_login</span><span class="params">(RequestHandler)</span>:</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @gen.coroutine</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self)</span>:</span></span><br><span class="line">        res = <span class="keyword">yield</span> // 某些耗时操作，比如数据入库</span><br><span class="line">        <span class="keyword">return</span> self.finish(&#123;<span class="string">"code"</span>: <span class="number">200</span>, <span class="string">"msg"</span>: <span class="string">"done"</span>&#125;)</span><br></pre></td></tr></table></figure>
+
+<h5 id="nbsp-nbsp-nbsp-nbsp-在-python-3-4-引入-async-await-后，Tornado（版本需要大于5-0）-还支持这么写："><a href="#nbsp-nbsp-nbsp-nbsp-在-python-3-4-引入-async-await-后，Tornado（版本需要大于5-0）-还支持这么写：" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;在 python 3.4 引入 async/await 后，Tornado（版本需要大于5.0） 还支持这么写："></a>&nbsp;&nbsp;&nbsp;&nbsp;在 python 3.4 引入 async/await 后，Tornado（版本需要大于5.0） 还支持这么写：</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">fetch_coroutine</span><span class="params">(url)</span>:</span></span><br><span class="line">    http_client = AsyncHTTPClient()</span><br><span class="line">    response = <span class="keyword">await</span> http_client.fetch(url)</span><br><span class="line">    <span class="keyword">return</span> response.body</span><br></pre></td></tr></table></figure>
+<h5 id="nbsp-nbsp-nbsp-nbsp-完完全全的-python-原生-async-await-写法，区别只是不再需要你自己创建一个-IOLoop-了，Tornado-的-IOLoop-帮你注册和执行了你的-async-def-函数。"><a href="#nbsp-nbsp-nbsp-nbsp-完完全全的-python-原生-async-await-写法，区别只是不再需要你自己创建一个-IOLoop-了，Tornado-的-IOLoop-帮你注册和执行了你的-async-def-函数。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;完完全全的 python 原生 async/await 写法，区别只是不再需要你自己创建一个 IOLoop 了，Tornado 的 IOLoop 帮你注册和执行了你的 async def 函数。"></a>&nbsp;&nbsp;&nbsp;&nbsp;完完全全的 python 原生 async/await 写法，区别只是不再需要你自己创建一个 IOLoop 了，Tornado 的 IOLoop 帮你注册和执行了你的 async def 函数。</h5>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/06/07/article-2/" data-id="ckb4ps5lr0000po7nhmv52yc3" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-article-1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/06/05/article-1/" class="article-date">
@@ -94,7 +133,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/06/05/article-1/" data-id="ckb1n3l6q0000u87n13984uji" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/06/05/article-1/" data-id="ckb4ps5lz0001po7ne6d27aeb" class="article-share-link">Share</a>
       
       
     </footer>
@@ -134,7 +173,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/06/05/article/" data-id="ckb1n3l6y0001u87n57aa8ruj" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/06/05/article/" data-id="ckb4ps5m60002po7n7s4bcr2p" class="article-share-link">Share</a>
       
       
     </footer>
@@ -173,7 +212,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/06/04/hello-world/" data-id="ckb1n3l700002u87n93hrgmj0" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/06/04/hello-world/" data-id="ckb4ps5md0003po7neub33okm" class="article-share-link">Share</a>
       
       
     </footer>
@@ -212,6 +251,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2020/06/07/article-2/">Python Tornado 协程</a>
+          </li>
         
           <li>
             <a href="/2020/06/05/article-1/">Python async/await</a>
