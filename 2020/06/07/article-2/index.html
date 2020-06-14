@@ -1,92 +1,303 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  
+
+
 
   
-  <title>Python Tornado 协程 | Hexo</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="python web 开发 经验知识分享api请求异步处理 之 Tornado 协程实现&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;熟悉 Flask 的朋友都知道，Flask 框架在处理并发的时候基本是通过 gevent 这类库，通过 gevent 的 monkey.patch_all() 将你的同步阻塞逻辑变成异步非阻塞。美中不足的是，gevent 库本身是存在一些缺陷和隐患的，gevent">
+
+
+<html class="theme-next muse use-motion" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="python web 开发 经验知识分享api请求异步处理 之 Tornado 协程实现&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;熟悉 Flask 的朋友都知道，Flask 框架在处理并发的时候基本是通过 gevent 这类库，通过 gevent 的 monkey.patch_all() 将你的同步阻塞逻辑变成异步非阻塞。美中不足的是，gevent 库本身是存在一些缺陷和隐患的，gevent">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python Tornado 协程">
 <meta property="og:url" content="http://yoursite.com/2020/06/07/article-2/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="水怪Water-Monster">
 <meta property="og:description" content="python web 开发 经验知识分享api请求异步处理 之 Tornado 协程实现&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;熟悉 Flask 的朋友都知道，Flask 框架在处理并发的时候基本是通过 gevent 这类库，通过 gevent 的 monkey.patch_all() 将你的同步阻塞逻辑变成异步非阻塞。美中不足的是，gevent 库本身是存在一些缺陷和隐患的，gevent">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2020-06-07T05:53:21.823Z">
 <meta property="article:modified_time" content="2020-06-07T06:56:26.182Z">
 <meta property="article:author" content="John Doe">
 <meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/07/article-2/"/>
+
+
+
+
+
+  <title>Python Tornado 协程 | 水怪Water-Monster</title>
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
-  
-  
-    <link rel="icon" href="/favicon.png">
-  
-  
-    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
-  
-  
-<link rel="stylesheet" href="/css/style.css">
+
+
+
+
+
+
+
 
 <meta name="generator" content="Hexo 4.2.1"></head>
 
-<body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
-      </h1>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
-      </div>
-    </div>
-  </div>
-</header>
-      <div class="outer">
-        <section id="main"><article id="post-article-2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/06/07/article-2/" class="article-date">
-  <time datetime="2020-06-07T05:53:21.823Z" itemprop="datePublished">2020-06-07</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
   
-    <h1 class="article-title" itemprop="name">
-      Python Tornado 协程
-    </h1>
+  
+    
   
 
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">水怪Water-Monster</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/%20" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/07/article-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="John Doe">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="水怪Water-Monster">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Python Tornado 协程</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-07T13:53:21+08:00">
+                2020-06-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
       </header>
     
-    <div class="article-entry" itemprop="articleBody">
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
       
         <h3 id="python-web-开发-经验知识分享"><a href="#python-web-开发-经验知识分享" class="headerlink" title="python web 开发 经验知识分享"></a>python web 开发 经验知识分享</h3><h3 id="api请求异步处理-之-Tornado-协程实现"><a href="#api请求异步处理-之-Tornado-协程实现" class="headerlink" title="api请求异步处理 之 Tornado 协程实现"></a>api请求异步处理 之 Tornado 协程实现</h3><h5 id="nbsp-nbsp-nbsp-nbsp-熟悉-Flask-的朋友都知道，Flask-框架在处理并发的时候基本是通过-gevent-这类库，通过-gevent-的-monkey-patch-all-将你的同步阻塞逻辑变成异步非阻塞。美中不足的是，gevent-库本身是存在一些缺陷和隐患的，gevent-将直接修改标准库中大部分的阻塞式调用，包括socket、ssl、threading、select等模块，变为协作式运行，但这些标准库可能会在复杂的业务逻辑下出现各种奇奇怪怪的bug。另外某些-python-的第三方库并不支持-gevent-的猴子补丁，那么在引用到这类库的时候就没法简单的用-monkey-patch-all-解决并发。"><a href="#nbsp-nbsp-nbsp-nbsp-熟悉-Flask-的朋友都知道，Flask-框架在处理并发的时候基本是通过-gevent-这类库，通过-gevent-的-monkey-patch-all-将你的同步阻塞逻辑变成异步非阻塞。美中不足的是，gevent-库本身是存在一些缺陷和隐患的，gevent-将直接修改标准库中大部分的阻塞式调用，包括socket、ssl、threading、select等模块，变为协作式运行，但这些标准库可能会在复杂的业务逻辑下出现各种奇奇怪怪的bug。另外某些-python-的第三方库并不支持-gevent-的猴子补丁，那么在引用到这类库的时候就没法简单的用-monkey-patch-all-解决并发。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;熟悉 Flask 的朋友都知道，Flask 框架在处理并发的时候基本是通过 gevent 这类库，通过 gevent 的 monkey.patch_all() 将你的同步阻塞逻辑变成异步非阻塞。美中不足的是，gevent 库本身是存在一些缺陷和隐患的，gevent 将直接修改标准库中大部分的阻塞式调用，包括socket、ssl、threading、select等模块，变为协作式运行，但这些标准库可能会在复杂的业务逻辑下出现各种奇奇怪怪的bug。另外某些 python 的第三方库并不支持 gevent 的猴子补丁，那么在引用到这类库的时候就没法简单的用 monkey.patch_all() 解决并发。"></a>&nbsp;&nbsp;&nbsp;&nbsp;熟悉 Flask 的朋友都知道，Flask 框架在处理并发的时候基本是通过 gevent 这类库，通过 gevent 的 monkey.patch_all() 将你的同步阻塞逻辑变成异步非阻塞。美中不足的是，gevent 库本身是存在一些缺陷和隐患的，gevent 将直接修改标准库中大部分的阻塞式调用，包括socket、ssl、threading、select等模块，变为协作式运行，但这些标准库可能会在复杂的业务逻辑下出现各种奇奇怪怪的bug。另外某些 python 的第三方库并不支持 gevent 的猴子补丁，那么在引用到这类库的时候就没法简单的用 monkey.patch_all() 解决并发。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-Tornado作为-python-性能最好的框架，在框架本身的层面上就直接支持协程式运作，这比-Flask-gevent-的方案要好不少，我们不必再去担心我们的标准库因为打了猴子补丁的原因变得难以使用。"><a href="#nbsp-nbsp-nbsp-nbsp-Tornado作为-python-性能最好的框架，在框架本身的层面上就直接支持协程式运作，这比-Flask-gevent-的方案要好不少，我们不必再去担心我们的标准库因为打了猴子补丁的原因变得难以使用。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;Tornado作为 python 性能最好的框架，在框架本身的层面上就直接支持协程式运作，这比 Flask + gevent 的方案要好不少，我们不必再去担心我们的标准库因为打了猴子补丁的原因变得难以使用。"></a>&nbsp;&nbsp;&nbsp;&nbsp;Tornado作为 python 性能最好的框架，在框架本身的层面上就直接支持协程式运作，这比 Flask + gevent 的方案要好不少，我们不必再去担心我们的标准库因为打了猴子补丁的原因变得难以使用。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-我们前面讲了-python-本身是如何使用协程异步处理多任务的，现在来看看-Tornado-是怎么做的。在官方文档中，我们可以读到，-Tornado-建议我们将需要做协程处理的方法以-gen-coroutine-装饰器包装起来，在需要挂起的耗时操作前加上-yield-关键字。在这时，每一个这样做了的请求对象都会被-Tornado-实例化为一个-task，并且会被注册到-Tornado-的-IOLoop-中去。在任意请求的代码走到-yield-时，Tornado-就会切换执行另一个请求，也就是说每个请求都会像我们之前讲过的协程任务-task-一样，被注册进-Tornado-IOLoop，请求和请求之间变成了协程运作，去共用一个线程资源。"><a href="#nbsp-nbsp-nbsp-nbsp-我们前面讲了-python-本身是如何使用协程异步处理多任务的，现在来看看-Tornado-是怎么做的。在官方文档中，我们可以读到，-Tornado-建议我们将需要做协程处理的方法以-gen-coroutine-装饰器包装起来，在需要挂起的耗时操作前加上-yield-关键字。在这时，每一个这样做了的请求对象都会被-Tornado-实例化为一个-task，并且会被注册到-Tornado-的-IOLoop-中去。在任意请求的代码走到-yield-时，Tornado-就会切换执行另一个请求，也就是说每个请求都会像我们之前讲过的协程任务-task-一样，被注册进-Tornado-IOLoop，请求和请求之间变成了协程运作，去共用一个线程资源。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;我们前面讲了 python 本身是如何使用协程异步处理多任务的，现在来看看 Tornado 是怎么做的。在官方文档中，我们可以读到， Tornado 建议我们将需要做协程处理的方法以 @gen.coroutine 装饰器包装起来，在需要挂起的耗时操作前加上 yield 关键字。在这时，每一个这样做了的请求对象都会被 Tornado 实例化为一个 task，并且会被注册到 Tornado 的 IOLoop 中去。在任意请求的代码走到 yield 时，Tornado 就会切换执行另一个请求，也就是说每个请求都会像我们之前讲过的协程任务 task 一样，被注册进 Tornado IOLoop，请求和请求之间变成了协程运作，去共用一个线程资源。"></a>&nbsp;&nbsp;&nbsp;&nbsp;我们前面讲了 python 本身是如何使用协程异步处理多任务的，现在来看看 Tornado 是怎么做的。在官方文档中，我们可以读到， Tornado 建议我们将需要做协程处理的方法以 @gen.coroutine 装饰器包装起来，在需要挂起的耗时操作前加上 yield 关键字。在这时，每一个这样做了的请求对象都会被 Tornado 实例化为一个 task，并且会被注册到 Tornado 的 IOLoop 中去。在任意请求的代码走到 yield 时，Tornado 就会切换执行另一个请求，也就是说每个请求都会像我们之前讲过的协程任务 task 一样，被注册进 Tornado IOLoop，请求和请求之间变成了协程运作，去共用一个线程资源。</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Customer_login</span><span class="params">(RequestHandler)</span>:</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @gen.coroutine</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self)</span>:</span></span><br><span class="line">        res = <span class="keyword">yield</span> // 某些耗时操作，比如数据入库</span><br><span class="line">        <span class="keyword">return</span> self.finish(&#123;<span class="string">"code"</span>: <span class="number">200</span>, <span class="string">"msg"</span>: <span class="string">"done"</span>&#125;)</span><br></pre></td></tr></table></figure>
 
@@ -94,128 +305,357 @@
 <h5 id="nbsp-nbsp-nbsp-nbsp-完完全全的-python-原生-async-await-写法，区别只是不再需要你自己创建一个-IOLoop-了，Tornado-的-IOLoop-帮你注册和执行了你的-async-def-函数。"><a href="#nbsp-nbsp-nbsp-nbsp-完完全全的-python-原生-async-await-写法，区别只是不再需要你自己创建一个-IOLoop-了，Tornado-的-IOLoop-帮你注册和执行了你的-async-def-函数。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;完完全全的 python 原生 async/await 写法，区别只是不再需要你自己创建一个 IOLoop 了，Tornado 的 IOLoop 帮你注册和执行了你的 async def 函数。"></a>&nbsp;&nbsp;&nbsp;&nbsp;完完全全的 python 原生 async/await 写法，区别只是不再需要你自己创建一个 IOLoop 了，Tornado 的 IOLoop 帮你注册和执行了你的 async def 函数。</h5>
       
     </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/06/07/article-2/" data-id="ckbevdi1c00039g7n7tj57sfb" class="article-share-link">Share</a>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/05/article-1/" rel="next" title="Python async/await">
+                <i class="fa fa-chevron-left"></i> Python async/await
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/13/613/" rel="prev" title="Python 基础">
+                Python 基础 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
       
       
     </footer>
   </div>
   
-    
-<nav id="article-nav">
   
-    <a href="/2020/06/13/613/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
         
-          Python 基础
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%20%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#python-web-开发-经验知识分享"><span class="nav-number">1.</span> <span class="nav-text">python web 开发 经验知识分享</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#api请求异步处理-之-Tornado-协程实现"><span class="nav-number">2.</span> <span class="nav-text">api请求异步处理 之 Tornado 协程实现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-熟悉-Flask-的朋友都知道，Flask-框架在处理并发的时候基本是通过-gevent-这类库，通过-gevent-的-monkey-patch-all-将你的同步阻塞逻辑变成异步非阻塞。美中不足的是，gevent-库本身是存在一些缺陷和隐患的，gevent-将直接修改标准库中大部分的阻塞式调用，包括socket、ssl、threading、select等模块，变为协作式运行，但这些标准库可能会在复杂的业务逻辑下出现各种奇奇怪怪的bug。另外某些-python-的第三方库并不支持-gevent-的猴子补丁，那么在引用到这类库的时候就没法简单的用-monkey-patch-all-解决并发。"><span class="nav-number">2.0.1.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;熟悉 Flask 的朋友都知道，Flask 框架在处理并发的时候基本是通过 gevent 这类库，通过 gevent 的 monkey.patch_all() 将你的同步阻塞逻辑变成异步非阻塞。美中不足的是，gevent 库本身是存在一些缺陷和隐患的，gevent 将直接修改标准库中大部分的阻塞式调用，包括socket、ssl、threading、select等模块，变为协作式运行，但这些标准库可能会在复杂的业务逻辑下出现各种奇奇怪怪的bug。另外某些 python 的第三方库并不支持 gevent 的猴子补丁，那么在引用到这类库的时候就没法简单的用 monkey.patch_all() 解决并发。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-Tornado作为-python-性能最好的框架，在框架本身的层面上就直接支持协程式运作，这比-Flask-gevent-的方案要好不少，我们不必再去担心我们的标准库因为打了猴子补丁的原因变得难以使用。"><span class="nav-number">2.0.2.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Tornado作为 python 性能最好的框架，在框架本身的层面上就直接支持协程式运作，这比 Flask + gevent 的方案要好不少，我们不必再去担心我们的标准库因为打了猴子补丁的原因变得难以使用。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-我们前面讲了-python-本身是如何使用协程异步处理多任务的，现在来看看-Tornado-是怎么做的。在官方文档中，我们可以读到，-Tornado-建议我们将需要做协程处理的方法以-gen-coroutine-装饰器包装起来，在需要挂起的耗时操作前加上-yield-关键字。在这时，每一个这样做了的请求对象都会被-Tornado-实例化为一个-task，并且会被注册到-Tornado-的-IOLoop-中去。在任意请求的代码走到-yield-时，Tornado-就会切换执行另一个请求，也就是说每个请求都会像我们之前讲过的协程任务-task-一样，被注册进-Tornado-IOLoop，请求和请求之间变成了协程运作，去共用一个线程资源。"><span class="nav-number">2.0.3.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我们前面讲了 python 本身是如何使用协程异步处理多任务的，现在来看看 Tornado 是怎么做的。在官方文档中，我们可以读到， Tornado 建议我们将需要做协程处理的方法以 @gen.coroutine 装饰器包装起来，在需要挂起的耗时操作前加上 yield 关键字。在这时，每一个这样做了的请求对象都会被 Tornado 实例化为一个 task，并且会被注册到 Tornado 的 IOLoop 中去。在任意请求的代码走到 yield 时，Tornado 就会切换执行另一个请求，也就是说每个请求都会像我们之前讲过的协程任务 task 一样，被注册进 Tornado IOLoop，请求和请求之间变成了协程运作，去共用一个线程资源。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-在-python-3-4-引入-async-await-后，Tornado（版本需要大于5-0）-还支持这么写："><span class="nav-number">2.0.4.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在 python 3.4 引入 async&#x2F;await 后，Tornado（版本需要大于5.0） 还支持这么写：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-完完全全的-python-原生-async-await-写法，区别只是不再需要你自己创建一个-IOLoop-了，Tornado-的-IOLoop-帮你注册和执行了你的-async-def-函数。"><span class="nav-number">2.0.5.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;完完全全的 python 原生 async&#x2F;await 写法，区别只是不再需要你自己创建一个 IOLoop 了，Tornado 的 IOLoop 帮你注册和执行了你的 async def 函数。</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
         
       </div>
-    </a>
-  
-  
-    <a href="/2020/06/05/article-1/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Python async/await</div>
-    </a>
-  
-</nav>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">John Doe</span>
 
   
-</article>
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-
-  
-    
-
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li></ul>
-    </div>
-  </div>
+</div>
 
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2020/06/14/614/">kafka 相关</a>
-          </li>
-        
-          <li>
-            <a href="/2020/06/13/613/">Python 基础</a>
-          </li>
-        
-          <li>
-            <a href="/2020/06/07/article-2/">Python Tornado 协程</a>
-          </li>
-        
-          <li>
-            <a href="/2020/06/05/article-1/">Python async/await</a>
-          </li>
-        
-          <li>
-            <a href="/2020/06/05/article/">Python yield 实战</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
 
-  
-</aside>
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
         
       </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2020 John Doe<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-    </div>
-  </div>
-</footer>
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
     
 
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-
-
-  
-<link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
-
-  
-<script src="/fancybox/jquery.fancybox.pack.js"></script>
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
+    
 
   </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
 </body>
 </html>
