@@ -64,6 +64,46 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-614" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/06/14/614/" class="article-date">
+  <time datetime="2020-06-14T08:20:40.250Z" itemprop="datePublished">2020-06-14</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2020/06/14/614/">kafka 相关</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="web-开发-经验知识分享"><a href="#web-开发-经验知识分享" class="headerlink" title="web 开发 经验知识分享"></a>web 开发 经验知识分享</h3><h3 id="kafka-相关"><a href="#kafka-相关" class="headerlink" title="kafka 相关"></a>kafka 相关</h3><h5 id="nbsp-nbsp-nbsp-nbsp-最近经常会被问到一个问题，为什么我们需要一个消息队列，消息队列它好在哪里？"><a href="#nbsp-nbsp-nbsp-nbsp-最近经常会被问到一个问题，为什么我们需要一个消息队列，消息队列它好在哪里？" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;最近经常会被问到一个问题，为什么我们需要一个消息队列，消息队列它好在哪里？"></a>&nbsp;&nbsp;&nbsp;&nbsp;最近经常会被问到一个问题，为什么我们需要一个消息队列，消息队列它好在哪里？</h5><h5 id="nbsp-nbsp-nbsp-nbsp-通常来说，消息队列可以应用于以下三个场景："><a href="#nbsp-nbsp-nbsp-nbsp-通常来说，消息队列可以应用于以下三个场景：" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;通常来说，消息队列可以应用于以下三个场景："></a>&nbsp;&nbsp;&nbsp;&nbsp;通常来说，消息队列可以应用于以下三个场景：</h5><h4 id="nbsp-nbsp-nbsp-nbsp-1-解耦消息的生产和消费。"><a href="#nbsp-nbsp-nbsp-nbsp-1-解耦消息的生产和消费。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;1.解耦消息的生产和消费。"></a>&nbsp;&nbsp;&nbsp;&nbsp;1.解耦消息的生产和消费。</h4><h4 id="nbsp-nbsp-nbsp-nbsp-2-缓冲。"><a href="#nbsp-nbsp-nbsp-nbsp-2-缓冲。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;2.缓冲。"></a>&nbsp;&nbsp;&nbsp;&nbsp;2.缓冲。</h4><h4 id="nbsp-nbsp-nbsp-nbsp-3-不同模块之间的通讯。"><a href="#nbsp-nbsp-nbsp-nbsp-3-不同模块之间的通讯。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;3.不同模块之间的通讯。"></a>&nbsp;&nbsp;&nbsp;&nbsp;3.不同模块之间的通讯。</h4><h5 id="nbsp-nbsp-nbsp-nbsp-我们在涉及到邮件发送，短信发送这样的功能时，通常不会把它们就这么写进你的API逻辑内部。为什么？因为这类发布性质的功能写在API内部不仅会造成你的代码冗长，而且会拖累API的响应速度。那我们需要把它们写在哪？写一个脚本让API每次去调用吗？这样也行，但我们通常会采取更聪明的做法，那就是使用消息队列。我们在API内部向消息队列里“生产”我们需要做的发布类任务，把完成这一功能的实际代码写在一个循环中，循环读取消息队列内部被添加的任务，一旦读取到了，再去执行发布逻辑。这样的解耦，可以使我们的代码可读性更强，拆分性更好。"><a href="#nbsp-nbsp-nbsp-nbsp-我们在涉及到邮件发送，短信发送这样的功能时，通常不会把它们就这么写进你的API逻辑内部。为什么？因为这类发布性质的功能写在API内部不仅会造成你的代码冗长，而且会拖累API的响应速度。那我们需要把它们写在哪？写一个脚本让API每次去调用吗？这样也行，但我们通常会采取更聪明的做法，那就是使用消息队列。我们在API内部向消息队列里“生产”我们需要做的发布类任务，把完成这一功能的实际代码写在一个循环中，循环读取消息队列内部被添加的任务，一旦读取到了，再去执行发布逻辑。这样的解耦，可以使我们的代码可读性更强，拆分性更好。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;我们在涉及到邮件发送，短信发送这样的功能时，通常不会把它们就这么写进你的API逻辑内部。为什么？因为这类发布性质的功能写在API内部不仅会造成你的代码冗长，而且会拖累API的响应速度。那我们需要把它们写在哪？写一个脚本让API每次去调用吗？这样也行，但我们通常会采取更聪明的做法，那就是使用消息队列。我们在API内部向消息队列里“生产”我们需要做的发布类任务，把完成这一功能的实际代码写在一个循环中，循环读取消息队列内部被添加的任务，一旦读取到了，再去执行发布逻辑。这样的解耦，可以使我们的代码可读性更强，拆分性更好。"></a>&nbsp;&nbsp;&nbsp;&nbsp;我们在涉及到邮件发送，短信发送这样的功能时，通常不会把它们就这么写进你的API逻辑内部。为什么？因为这类发布性质的功能写在API内部不仅会造成你的代码冗长，而且会拖累API的响应速度。那我们需要把它们写在哪？写一个脚本让API每次去调用吗？这样也行，但我们通常会采取更聪明的做法，那就是使用消息队列。我们在API内部向消息队列里“生产”我们需要做的发布类任务，把完成这一功能的实际代码写在一个循环中，循环读取消息队列内部被添加的任务，一旦读取到了，再去执行发布逻辑。这样的解耦，可以使我们的代码可读性更强，拆分性更好。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-消息队列的另一大用法，就是用来缓冲高发数据。想象一下，如果我们某个接口大量产生数据入库的请求，我们在同一时间内执行这些请求，将一大堆数据塞进数据库，数据库此时负荷的住吗？单机情况下可能就直接爆了，结果就是会有请求超时，数据无法入库的情况。这种情况下，我们就需要使用消息队列去“化峰”，将高峰请求量吞下来，再后续慢慢吐给数据库，这就是一个缓冲的过程。"><a href="#nbsp-nbsp-nbsp-nbsp-消息队列的另一大用法，就是用来缓冲高发数据。想象一下，如果我们某个接口大量产生数据入库的请求，我们在同一时间内执行这些请求，将一大堆数据塞进数据库，数据库此时负荷的住吗？单机情况下可能就直接爆了，结果就是会有请求超时，数据无法入库的情况。这种情况下，我们就需要使用消息队列去“化峰”，将高峰请求量吞下来，再后续慢慢吐给数据库，这就是一个缓冲的过程。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;消息队列的另一大用法，就是用来缓冲高发数据。想象一下，如果我们某个接口大量产生数据入库的请求，我们在同一时间内执行这些请求，将一大堆数据塞进数据库，数据库此时负荷的住吗？单机情况下可能就直接爆了，结果就是会有请求超时，数据无法入库的情况。这种情况下，我们就需要使用消息队列去“化峰”，将高峰请求量吞下来，再后续慢慢吐给数据库，这就是一个缓冲的过程。"></a>&nbsp;&nbsp;&nbsp;&nbsp;消息队列的另一大用法，就是用来缓冲高发数据。想象一下，如果我们某个接口大量产生数据入库的请求，我们在同一时间内执行这些请求，将一大堆数据塞进数据库，数据库此时负荷的住吗？单机情况下可能就直接爆了，结果就是会有请求超时，数据无法入库的情况。这种情况下，我们就需要使用消息队列去“化峰”，将高峰请求量吞下来，再后续慢慢吐给数据库，这就是一个缓冲的过程。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-最后一种用法，比较简单，但也非常常见。我的A模块与B模块是两个不相干的模块，但现在有个功能需要实现A向B传递数据，我们怎么做？暴力一点的人会说，模块都在同一个项目里，直接用A去调B吧！那如果不是同一个项目呢？这时肯定就会有人提出，那我们发一个Http请求吧。但是谁来保证这个请求一定能发送成功呢？如果要做失败重发，那不是还要多写一大堆逻辑？这个时候，消息队列也可以承担这个模块中间人的功能，A向消息队列写入数据，由B去消费，中间的担保人是消息队列，A-B的模块都不需要额外添加功能，岂不美哉？"><a href="#nbsp-nbsp-nbsp-nbsp-最后一种用法，比较简单，但也非常常见。我的A模块与B模块是两个不相干的模块，但现在有个功能需要实现A向B传递数据，我们怎么做？暴力一点的人会说，模块都在同一个项目里，直接用A去调B吧！那如果不是同一个项目呢？这时肯定就会有人提出，那我们发一个Http请求吧。但是谁来保证这个请求一定能发送成功呢？如果要做失败重发，那不是还要多写一大堆逻辑？这个时候，消息队列也可以承担这个模块中间人的功能，A向消息队列写入数据，由B去消费，中间的担保人是消息队列，A-B的模块都不需要额外添加功能，岂不美哉？" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;最后一种用法，比较简单，但也非常常见。我的A模块与B模块是两个不相干的模块，但现在有个功能需要实现A向B传递数据，我们怎么做？暴力一点的人会说，模块都在同一个项目里，直接用A去调B吧！那如果不是同一个项目呢？这时肯定就会有人提出，那我们发一个Http请求吧。但是谁来保证这个请求一定能发送成功呢？如果要做失败重发，那不是还要多写一大堆逻辑？这个时候，消息队列也可以承担这个模块中间人的功能，A向消息队列写入数据，由B去消费，中间的担保人是消息队列，A B的模块都不需要额外添加功能，岂不美哉？"></a>&nbsp;&nbsp;&nbsp;&nbsp;最后一种用法，比较简单，但也非常常见。我的A模块与B模块是两个不相干的模块，但现在有个功能需要实现A向B传递数据，我们怎么做？暴力一点的人会说，模块都在同一个项目里，直接用A去调B吧！那如果不是同一个项目呢？这时肯定就会有人提出，那我们发一个Http请求吧。但是谁来保证这个请求一定能发送成功呢？如果要做失败重发，那不是还要多写一大堆逻辑？这个时候，消息队列也可以承担这个模块中间人的功能，A向消息队列写入数据，由B去消费，中间的担保人是消息队列，A B的模块都不需要额外添加功能，岂不美哉？</h5><h5 id="nbsp-nbsp-nbsp-nbsp-讲了这么多消息队列的用法，我们来看一看-Kafka-是个什么东西。"><a href="#nbsp-nbsp-nbsp-nbsp-讲了这么多消息队列的用法，我们来看一看-Kafka-是个什么东西。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;讲了这么多消息队列的用法，我们来看一看 Kafka 是个什么东西。"></a>&nbsp;&nbsp;&nbsp;&nbsp;讲了这么多消息队列的用法，我们来看一看 Kafka 是个什么东西。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-Kafka-is-used-for-building-real-time-data-pipelines-and-streaming-apps-It-is-horizontally-scalable-fault-tolerant-wicked-fast-and-runs-in-production-in-thousands-of-companies-这是-Kafka-官方对其的描述，Kafka-是一个实时的数据处理系统，它高可用，可横向扩展，速度非常之快。"><a href="#nbsp-nbsp-nbsp-nbsp-Kafka-is-used-for-building-real-time-data-pipelines-and-streaming-apps-It-is-horizontally-scalable-fault-tolerant-wicked-fast-and-runs-in-production-in-thousands-of-companies-这是-Kafka-官方对其的描述，Kafka-是一个实时的数据处理系统，它高可用，可横向扩展，速度非常之快。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;Kafka is used for building real-time data pipelines and streaming apps. It is horizontally scalable, fault-tolerant, wicked fast, and runs in production in thousands of companies. 这是 Kafka 官方对其的描述，Kafka 是一个实时的数据处理系统，它高可用，可横向扩展，速度非常之快。"></a>&nbsp;&nbsp;&nbsp;&nbsp;Kafka is used for building real-time data pipelines and streaming apps. It is horizontally scalable, fault-tolerant, wicked fast, and runs in production in thousands of companies. 这是 Kafka 官方对其的描述，Kafka 是一个实时的数据处理系统，它高可用，可横向扩展，速度非常之快。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-Kafka会对数据进行持久化存储，消费者端会记录一个offset，表明该消费者当前消费到哪条数据，所以下次消费者想继续消费，只需从offset-1的位置继续消费就好了。在-kafka-中，不同的消息队列可以被指定为不同的-topic-，topic-之间互相隔离，保证我的A-topic-的消费者不会跑到B-去消费数据。每个topic将被分成多个-partition-区-每个-partition-在存储层面是append-log文件。任何发布到此-partition-的消息都会被直接追加到log文件的尾部，每条消息在文件中的位置称为-offset（偏移量），offset-为一个long型数字，它是唯一标记一条消息。它唯一的标记一条消息。"><a href="#nbsp-nbsp-nbsp-nbsp-Kafka会对数据进行持久化存储，消费者端会记录一个offset，表明该消费者当前消费到哪条数据，所以下次消费者想继续消费，只需从offset-1的位置继续消费就好了。在-kafka-中，不同的消息队列可以被指定为不同的-topic-，topic-之间互相隔离，保证我的A-topic-的消费者不会跑到B-去消费数据。每个topic将被分成多个-partition-区-每个-partition-在存储层面是append-log文件。任何发布到此-partition-的消息都会被直接追加到log文件的尾部，每条消息在文件中的位置称为-offset（偏移量），offset-为一个long型数字，它是唯一标记一条消息。它唯一的标记一条消息。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;Kafka会对数据进行持久化存储，消费者端会记录一个offset，表明该消费者当前消费到哪条数据，所以下次消费者想继续消费，只需从offset+1的位置继续消费就好了。在 kafka 中，不同的消息队列可以被指定为不同的 topic ，topic 之间互相隔离，保证我的A topic 的消费者不会跑到B 去消费数据。每个topic将被分成多个 partition(区),每个 partition 在存储层面是append log文件。任何发布到此 partition 的消息都会被直接追加到log文件的尾部，每条消息在文件中的位置称为 offset（偏移量），offset 为一个long型数字，它是唯一标记一条消息。它唯一的标记一条消息。"></a>&nbsp;&nbsp;&nbsp;&nbsp;Kafka会对数据进行持久化存储，消费者端会记录一个offset，表明该消费者当前消费到哪条数据，所以下次消费者想继续消费，只需从offset+1的位置继续消费就好了。在 kafka 中，不同的消息队列可以被指定为不同的 topic ，topic 之间互相隔离，保证我的A topic 的消费者不会跑到B 去消费数据。每个topic将被分成多个 partition(区),每个 partition 在存储层面是append log文件。任何发布到此 partition 的消息都会被直接追加到log文件的尾部，每条消息在文件中的位置称为 offset（偏移量），offset 为一个long型数字，它是唯一标记一条消息。它唯一的标记一条消息。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-partitions的设计目的有多个-最根本原因是kafka基于文件存储-通过分区-可以将日志内容分散到多个server上-来避免文件尺寸达到单机磁盘的上限-每个partiton都会被当前server-kafka实例-保存-可以将一个topic切分多任意多个partitions-来消息保存-消费的效率-此外越多的partitions意味着可以容纳更多的consumer-有效提升并发消费的能力"><a href="#nbsp-nbsp-nbsp-nbsp-partitions的设计目的有多个-最根本原因是kafka基于文件存储-通过分区-可以将日志内容分散到多个server上-来避免文件尺寸达到单机磁盘的上限-每个partiton都会被当前server-kafka实例-保存-可以将一个topic切分多任意多个partitions-来消息保存-消费的效率-此外越多的partitions意味着可以容纳更多的consumer-有效提升并发消费的能力" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;partitions的设计目的有多个.最根本原因是kafka基于文件存储.通过分区,可以将日志内容分散到多个server上,来避免文件尺寸达到单机磁盘的上限,每个partiton都会被当前server(kafka实例)保存;可以将一个topic切分多任意多个partitions,来消息保存/消费的效率.此外越多的partitions意味着可以容纳更多的consumer,有效提升并发消费的能力."></a>&nbsp;&nbsp;&nbsp;&nbsp;partitions的设计目的有多个.最根本原因是kafka基于文件存储.通过分区,可以将日志内容分散到多个server上,来避免文件尺寸达到单机磁盘的上限,每个partiton都会被当前server(kafka实例)保存;可以将一个topic切分多任意多个partitions,来消息保存/消费的效率.此外越多的partitions意味着可以容纳更多的consumer,有效提升并发消费的能力.</h5><h5 id="nbsp-nbsp-nbsp-nbsp-在-python-中，我们连接-kafka-一般是这样的："><a href="#nbsp-nbsp-nbsp-nbsp-在-python-中，我们连接-kafka-一般是这样的：" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;在 python 中，我们连接 kafka 一般是这样的："></a>&nbsp;&nbsp;&nbsp;&nbsp;在 python 中，我们连接 kafka 一般是这样的：</h5><h5 id="nbsp-nbsp-nbsp-nbsp-生产者"><a href="#nbsp-nbsp-nbsp-nbsp-生产者" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;生产者"></a>&nbsp;&nbsp;&nbsp;&nbsp;生产者</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> kafka <span class="keyword">import</span> KafkaProducer</span><br><span class="line"></span><br><span class="line">producer = KafkaProducer(bootstrap_servers=[<span class="string">'localhost:9092'</span>])</span><br><span class="line">future = producer.send(<span class="string">'my_topic'</span> , key= <span class="string">b'my_key'</span>, value= <span class="string">b'my_value'</span>, partition= <span class="number">0</span>)</span><br><span class="line">result = future.get(timeout= <span class="number">10</span>)</span><br><span class="line">print(result)</span><br></pre></td></tr></table></figure>
+
+<h5 id="nbsp-nbsp-nbsp-nbsp-消费者"><a href="#nbsp-nbsp-nbsp-nbsp-消费者" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;消费者"></a>&nbsp;&nbsp;&nbsp;&nbsp;消费者</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> kafka <span class="keyword">import</span> KafkaConsumer</span><br><span class="line"></span><br><span class="line">consumer = KafkaConsumer(<span class="string">'my_topic'</span>, group_id= <span class="string">'group2'</span>, bootstrap_servers= [<span class="string">'localhost:9092'</span>])</span><br><span class="line"><span class="keyword">for</span> msg <span class="keyword">in</span> consumer:</span><br><span class="line">    print(msg)</span><br></pre></td></tr></table></figure>
+
+<h5 id="nbsp-nbsp-nbsp-nbsp-备注下，group-id这个东西，比较复杂，是kafka提供的可扩展且具有容错性的消费者机制组，以后的博文会专门讨论它。"><a href="#nbsp-nbsp-nbsp-nbsp-备注下，group-id这个东西，比较复杂，是kafka提供的可扩展且具有容错性的消费者机制组，以后的博文会专门讨论它。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;备注下，group_id这个东西，比较复杂，是kafka提供的可扩展且具有容错性的消费者机制组，以后的博文会专门讨论它。"></a>&nbsp;&nbsp;&nbsp;&nbsp;备注下，group_id这个东西，比较复杂，是kafka提供的可扩展且具有容错性的消费者机制组，以后的博文会专门讨论它。</h5>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/06/14/614/" data-id="ckbev9h940001i07n90mmao63" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-613" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2020/06/13/613/" class="article-date">
@@ -99,7 +139,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/06/13/613/" data-id="ckbdbhb2n0000e87n6mi6dadt" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/06/13/613/" data-id="ckbev9h8v0000i07n9xb6hltc" class="article-share-link">Share</a>
       
       
     </footer>
@@ -138,7 +178,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/06/07/article-2/" data-id="ckbdbhb2v0002e87n2hxobw2c" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/06/07/article-2/" data-id="ckbev9h970002i07n2ry2g0pr" class="article-share-link">Share</a>
       
       
     </footer>
@@ -178,7 +218,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/06/05/article-1/" data-id="ckbdbhb2u0001e87n2cqje9ua" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/06/05/article-1/" data-id="ckbev9h9g0004i07n3io12mtp" class="article-share-link">Share</a>
       
       
     </footer>
@@ -218,7 +258,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/06/05/article/" data-id="ckbdbhb390003e87n7k05cidf" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/06/05/article/" data-id="ckbev9h9g0005i07n74g6gop8" class="article-share-link">Share</a>
       
       
     </footer>
@@ -257,7 +297,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2020/06/04/hello-world/" data-id="ckbdbhb3a0004e87n9ynehpvu" class="article-share-link">Share</a>
+      <a data-url="http://yoursite.com/2020/06/04/hello-world/" data-id="ckbev9h980003i07ndond47mj" class="article-share-link">Share</a>
       
       
     </footer>
@@ -298,6 +338,10 @@
       <ul>
         
           <li>
+            <a href="/2020/06/14/614/">kafka 相关</a>
+          </li>
+        
+          <li>
             <a href="/2020/06/13/613/">613</a>
           </li>
         
@@ -311,10 +355,6 @@
         
           <li>
             <a href="/2020/06/05/article/">Python yield 实战</a>
-          </li>
-        
-          <li>
-            <a href="/2020/06/04/hello-world/">python yield</a>
           </li>
         
       </ul>
