@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion" lang="en">
+<html class="theme-next muse use-motion" lang="zh-CN">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -83,8 +83,8 @@
 <meta property="og:title" content="水怪Water-Monster">
 <meta property="og:url" content="http://yoursite.com/index.html">
 <meta property="og:site_name" content="水怪Water-Monster">
-<meta property="og:locale" content="en_US">
-<meta property="article:author" content="John Doe">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="水怪Water-Monster">
 <meta name="twitter:card" content="summary">
 
 
@@ -95,7 +95,7 @@
     root: '/',
     scheme: 'Muse',
     version: '5.1.4',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false,"b2t":false,"scrollpercent":false},
     fancybox: true,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
@@ -133,7 +133,7 @@
 
 <meta name="generator" content="Hexo 4.2.1"></head>
 
-<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
 
   
   
@@ -157,7 +157,7 @@
       </a>
     </div>
       
-        <p class="site-subtitle"></p>
+        <p class="site-subtitle">每日一博</p>
       
   </div>
 
@@ -229,10 +229,131 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/15/615/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="水怪Water-Monster">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="水怪Water-Monster">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/15/615/" itemprop="url">线程锁</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-15T10:30:16+08:00">
+                2020-06-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="python-web-开发-经验知识分享"><a href="#python-web-开发-经验知识分享" class="headerlink" title="python web 开发 经验知识分享"></a>python web 开发 经验知识分享</h3><h3 id="普通线程锁与递归锁"><a href="#普通线程锁与递归锁" class="headerlink" title="普通线程锁与递归锁"></a>普通线程锁与递归锁</h3><h5 id="nbsp-nbsp-nbsp-nbsp-python-在-threading-模块中，为我们提供了一个简单的线程锁："><a href="#nbsp-nbsp-nbsp-nbsp-python-在-threading-模块中，为我们提供了一个简单的线程锁：" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;python 在 threading 模块中，为我们提供了一个简单的线程锁："></a>&nbsp;&nbsp;&nbsp;&nbsp;python 在 threading 模块中，为我们提供了一个简单的线程锁：</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line">lock = threading.Lock()</span><br><span class="line">lock.acquire()</span><br><span class="line">lock.release()</span><br></pre></td></tr></table></figure>
+<h5 id="nbsp-nbsp-nbsp-nbsp-线程锁可以在我们多线程执行任务的时候，保证当前线程的公共资源不会被其他线程抢占，这是我们解决多线程资源掠夺的主要手段。"><a href="#nbsp-nbsp-nbsp-nbsp-线程锁可以在我们多线程执行任务的时候，保证当前线程的公共资源不会被其他线程抢占，这是我们解决多线程资源掠夺的主要手段。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;线程锁可以在我们多线程执行任务的时候，保证当前线程的公共资源不会被其他线程抢占，这是我们解决多线程资源掠夺的主要手段。"></a>&nbsp;&nbsp;&nbsp;&nbsp;线程锁可以在我们多线程执行任务的时候，保证当前线程的公共资源不会被其他线程抢占，这是我们解决多线程资源掠夺的主要手段。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-但是现在有一个问题，我的一个锁内的逻辑还需要调用一个别的模块，该模块中同样申请了锁，即我需要一个锁中锁，普通的-threading-Lock-是无法解决这个问题的，因为如果你不释放锁，你是不能再次-acquire-的。这时就需要用到另一种锁了，我们管他叫递归锁，也叫可重入锁。"><a href="#nbsp-nbsp-nbsp-nbsp-但是现在有一个问题，我的一个锁内的逻辑还需要调用一个别的模块，该模块中同样申请了锁，即我需要一个锁中锁，普通的-threading-Lock-是无法解决这个问题的，因为如果你不释放锁，你是不能再次-acquire-的。这时就需要用到另一种锁了，我们管他叫递归锁，也叫可重入锁。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;但是现在有一个问题，我的一个锁内的逻辑还需要调用一个别的模块，该模块中同样申请了锁，即我需要一个锁中锁，普通的 threading.Lock() 是无法解决这个问题的，因为如果你不释放锁，你是不能再次 acquire() 的。这时就需要用到另一种锁了，我们管他叫递归锁，也叫可重入锁。"></a>&nbsp;&nbsp;&nbsp;&nbsp;但是现在有一个问题，我的一个锁内的逻辑还需要调用一个别的模块，该模块中同样申请了锁，即我需要一个锁中锁，普通的 threading.Lock() 是无法解决这个问题的，因为如果你不释放锁，你是不能再次 acquire() 的。这时就需要用到另一种锁了，我们管他叫递归锁，也叫可重入锁。</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading  </span><br><span class="line">rLock = threading.RLock()</span><br><span class="line"></span><br><span class="line">rLock.acquire()  </span><br><span class="line">rLock.acquire() </span><br><span class="line"></span><br><span class="line">rLock.release()  </span><br><span class="line">rLock.release()</span><br></pre></td></tr></table></figure>
+<h5 id="nbsp-nbsp-nbsp-nbsp-RLock允许在同一线程中被多次acquire，每次-acquire-都必须有一次对应的-release-释放，少一个-release-就不能释放锁，多一个-release-就会报一个异常，告诉你无法释放一个未加锁的对象。"><a href="#nbsp-nbsp-nbsp-nbsp-RLock允许在同一线程中被多次acquire，每次-acquire-都必须有一次对应的-release-释放，少一个-release-就不能释放锁，多一个-release-就会报一个异常，告诉你无法释放一个未加锁的对象。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;RLock允许在同一线程中被多次acquire，每次 acquire 都必须有一次对应的 release 释放，少一个 release 就不能释放锁，多一个 release 就会报一个异常，告诉你无法释放一个未加锁的对象。"></a>&nbsp;&nbsp;&nbsp;&nbsp;RLock允许在同一线程中被多次acquire，每次 acquire 都必须有一次对应的 release 释放，少一个 release 就不能释放锁，多一个 release 就会报一个异常，告诉你无法释放一个未加锁的对象。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-递归锁可以解决我们需要用到锁中锁的场景，当然-threading-模块中还有个更加高级的-Condition-加锁，这个我们之后会说。"><a href="#nbsp-nbsp-nbsp-nbsp-递归锁可以解决我们需要用到锁中锁的场景，当然-threading-模块中还有个更加高级的-Condition-加锁，这个我们之后会说。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;递归锁可以解决我们需要用到锁中锁的场景，当然 threading 模块中还有个更加高级的 Condition 加锁，这个我们之后会说。"></a>&nbsp;&nbsp;&nbsp;&nbsp;递归锁可以解决我们需要用到锁中锁的场景，当然 threading 模块中还有个更加高级的 Condition 加锁，这个我们之后会说。</h5>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/14/614/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
+      <meta itemprop="name" content="水怪Water-Monster">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
@@ -355,7 +476,7 @@
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/13/613/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
+      <meta itemprop="name" content="水怪Water-Monster">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
@@ -482,7 +603,7 @@
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/07/article-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
+      <meta itemprop="name" content="水怪Water-Monster">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
@@ -604,7 +725,7 @@
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/05/article-1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
+      <meta itemprop="name" content="水怪Water-Monster">
       <meta itemprop="description" content="">
       <meta itemprop="image" content="/images/avatar.gif">
     </span>
@@ -711,254 +832,13 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/05/article/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="水怪Water-Monster">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/06/05/article/" itemprop="url">Python yield 实战</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-05T09:58:59+08:00">
-                2020-06-05
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="python-web-开发-经验知识分享"><a href="#python-web-开发-经验知识分享" class="headerlink" title="python web 开发 经验知识分享"></a>python web 开发 经验知识分享</h3><h3 id="api请求异步处理-之-yield-实战"><a href="#api请求异步处理-之-yield-实战" class="headerlink" title="api请求异步处理 之 yield 实战"></a>api请求异步处理 之 yield 实战</h3><h5 id="现在我们使用-flask-来建立一个简易的请求"><a href="#现在我们使用-flask-来建立一个简易的请求" class="headerlink" title="现在我们使用 flask 来建立一个简易的请求"></a>现在我们使用 flask 来建立一个简易的请求</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> Flask</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line">app = Flask(__name__)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.route('/async')</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">async_test</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> async_work():</span><br><span class="line">        work1 = <span class="string">"do something 1"</span></span><br><span class="line">        print(work1)  <span class="comment"># 以print代替执行过程</span></span><br><span class="line">    <span class="keyword">return</span> json.dumps(&#123;<span class="string">"code"</span>: <span class="number">200</span>, <span class="string">"msg"</span>: <span class="string">"all work done"</span>&#125;)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">async_work</span><span class="params">()</span>:</span></span><br><span class="line">    work2 = <span class="string">"do something 2"</span></span><br><span class="line">    print(work2)</span><br><span class="line">    work3 = <span class="string">"do something 3"</span></span><br><span class="line">    <span class="keyword">yield</span> work3</span><br><span class="line">    time.sleep(<span class="number">3</span>)  <span class="comment"># 假设work3需要执行较长时间，这里用sleep代替</span></span><br><span class="line">    print(work3)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    app.run()</span><br></pre></td></tr></table></figure>
-
-<h5 id="nbsp-nbsp-nbsp-nbsp-可以看到，async-work-函数内部有两个work，-其中work3需要消耗较长的执行时间（3秒）。我们的期望是，在-async-work-整体的不做分割的情况下，把work3这样的长耗时任务放在接口逻辑的最后执行，那么在work3前面我们加上-yield-关键字，把整个函数变成一个可多次调用的生成器。"><a href="#nbsp-nbsp-nbsp-nbsp-可以看到，async-work-函数内部有两个work，-其中work3需要消耗较长的执行时间（3秒）。我们的期望是，在-async-work-整体的不做分割的情况下，把work3这样的长耗时任务放在接口逻辑的最后执行，那么在work3前面我们加上-yield-关键字，把整个函数变成一个可多次调用的生成器。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;可以看到，async_work 函数内部有两个work， 其中work3需要消耗较长的执行时间（3秒）。我们的期望是，在 async_work 整体的不做分割的情况下，把work3这样的长耗时任务放在接口逻辑的最后执行，那么在work3前面我们加上 yield 关键字，把整个函数变成一个可多次调用的生成器。"></a>&nbsp;&nbsp;&nbsp;&nbsp;可以看到，async_work 函数内部有两个work， 其中work3需要消耗较长的执行时间（3秒）。我们的期望是，在 async_work 整体的不做分割的情况下，把work3这样的长耗时任务放在接口逻辑的最后执行，那么在work3前面我们加上 yield 关键字，把整个函数变成一个可多次调用的生成器。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-当我们调用-localhost-5000-async-后，控制台打印出的work执行顺序是这样的："><a href="#nbsp-nbsp-nbsp-nbsp-当我们调用-localhost-5000-async-后，控制台打印出的work执行顺序是这样的：" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;当我们调用 localhost:5000/async 后，控制台打印出的work执行顺序是这样的："></a>&nbsp;&nbsp;&nbsp;&nbsp;当我们调用 localhost:5000/async 后，控制台打印出的work执行顺序是这样的：</h5><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> * Running on http:<span class="comment">//127.0.0.1:5000/ (Press CTRL+C to quit)</span></span><br><span class="line"><span class="keyword">do</span> something <span class="number">2</span></span><br><span class="line"><span class="keyword">do</span> something <span class="number">1</span></span><br><span class="line"><span class="keyword">do</span> something <span class="number">3</span></span><br><span class="line"><span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span> - - [<span class="number">05</span>/Jun/<span class="number">2020</span> <span class="number">10</span>:<span class="number">08</span>:<span class="number">57</span>] <span class="string">"GET /async HTTP/1.1"</span> <span class="number">200</span> -</span><br></pre></td></tr></table></figure>
-
-<h5 id="nbsp-nbsp-nbsp-nbsp-整个请求中，work2先被调用，然后执行-async-test-函数中的work1，最后在三秒后，work3被执行，接口响应完毕。"><a href="#nbsp-nbsp-nbsp-nbsp-整个请求中，work2先被调用，然后执行-async-test-函数中的work1，最后在三秒后，work3被执行，接口响应完毕。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;整个请求中，work2先被调用，然后执行 async_test 函数中的work1，最后在三秒后，work3被执行，接口响应完毕。"></a>&nbsp;&nbsp;&nbsp;&nbsp;整个请求中，work2先被调用，然后执行 async_test 函数中的work1，最后在三秒后，work3被执行，接口响应完毕。</h5>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/04/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="John Doe">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="水怪Water-Monster">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/06/04/hello-world/" itemprop="url">python yield</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-04T14:38:27+08:00">
-                2020-06-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="python-web-开发-经验知识分享"><a href="#python-web-开发-经验知识分享" class="headerlink" title="python web 开发 经验知识分享"></a>python web 开发 经验知识分享</h3><h3 id="api请求异步处理-之-yield"><a href="#api请求异步处理-之-yield" class="headerlink" title="api请求异步处理 之 yield"></a>api请求异步处理 之 yield</h3><h5 id="我们都知道，在python3-4引入-asyncio-模块，使用-async-await-关键字进行异步编程以前，我们的异步处理都要依赖关键字-yield-。"><a href="#我们都知道，在python3-4引入-asyncio-模块，使用-async-await-关键字进行异步编程以前，我们的异步处理都要依赖关键字-yield-。" class="headerlink" title="我们都知道，在python3.4引入 asyncio 模块，使用 async/await 关键字进行异步编程以前，我们的异步处理都要依赖关键字 yield 。"></a>我们都知道，在python3.4引入 asyncio 模块，使用 async/await 关键字进行异步编程以前，我们的异步处理都要依赖关键字 yield 。</h5><h5 id="使用-yield-编写异步的协程"><a href="#使用-yield-编写异步的协程" class="headerlink" title="使用 yield 编写异步的协程:"></a>使用 yield 编写异步的协程:</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">()</span>:</span></span><br><span class="line">    a, b, c = <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span></span><br><span class="line">    <span class="keyword">yield</span> print(a)</span><br><span class="line">    <span class="keyword">yield</span> print(b)</span><br><span class="line">    <span class="keyword">yield</span> print(c)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">(func)</span>:</span></span><br><span class="line">    n = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">        func.send(<span class="literal">None</span>)</span><br><span class="line">        n += <span class="number">1</span></span><br><span class="line">        print(n)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">produce</span><span class="params">()</span>:</span></span><br><span class="line">    a = func1()</span><br><span class="line">    func2(a)</span><br></pre></td></tr></table></figure>
-
-<h5 id="nbsp-nbsp-nbsp-nbsp-在这段代码中，我们可以看到，func1中的流程并未一次性走完，而是在第一次遇见-yield-关键字时停止了。func2走到第二次for循环时，再次调用-func-1的-send-方法，此时-func1-才继续开始执行，并且在下一个-yield-关键字处暂停执行。直到-func2-走到第三次循环时，func1-的流程才全部结束。"><a href="#nbsp-nbsp-nbsp-nbsp-在这段代码中，我们可以看到，func1中的流程并未一次性走完，而是在第一次遇见-yield-关键字时停止了。func2走到第二次for循环时，再次调用-func-1的-send-方法，此时-func1-才继续开始执行，并且在下一个-yield-关键字处暂停执行。直到-func2-走到第三次循环时，func1-的流程才全部结束。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;在这段代码中，我们可以看到，func1中的流程并未一次性走完，而是在第一次遇见 yield 关键字时停止了。func2走到第二次for循环时，再次调用 func 1的 send 方法，此时 func1 才继续开始执行，并且在下一个 yield 关键字处暂停执行。直到 func2 走到第三次循环时，func1 的流程才全部结束。"></a>&nbsp;&nbsp;&nbsp;&nbsp;在这段代码中，我们可以看到，func1中的流程并未一次性走完，而是在第一次遇见 yield 关键字时停止了。func2走到第二次for循环时，再次调用 func 1的 send 方法，此时 func1 才继续开始执行，并且在下一个 yield 关键字处暂停执行。直到 func2 走到第三次循环时，func1 的流程才全部结束。</h5><h5 id="在我们执行了这段代码后，结果是这样的："><a href="#在我们执行了这段代码后，结果是这样的：" class="headerlink" title="在我们执行了这段代码后，结果是这样的："></a>在我们执行了这段代码后，结果是这样的：</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    produce()</span><br><span class="line"></span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">6</span></span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
-<h5 id="nbsp-nbsp-nbsp-nbsp-我们可以看到-func1-的执行过程并不连续，print出的4，5，6三个数字夹杂在-func2-的循环中间。使用-yield-关键字我们可以把同步的代码改变为异步的，将一些耗时的操作（通常是各类I-O）交给yield-关键字，在再次需要调用到这些操作时，他们才会被执行。"><a href="#nbsp-nbsp-nbsp-nbsp-我们可以看到-func1-的执行过程并不连续，print出的4，5，6三个数字夹杂在-func2-的循环中间。使用-yield-关键字我们可以把同步的代码改变为异步的，将一些耗时的操作（通常是各类I-O）交给yield-关键字，在再次需要调用到这些操作时，他们才会被执行。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;我们可以看到 func1 的执行过程并不连续，print出的4，5，6三个数字夹杂在 func2 的循环中间。使用 yield 关键字我们可以把同步的代码改变为异步的，将一些耗时的操作（通常是各类I/O）交给yield 关键字，在再次需要调用到这些操作时，他们才会被执行。"></a>&nbsp;&nbsp;&nbsp;&nbsp;我们可以看到 func1 的执行过程并不连续，print出的4，5，6三个数字夹杂在 func2 的循环中间。使用 yield 关键字我们可以把同步的代码改变为异步的，将一些耗时的操作（通常是各类I/O）交给yield 关键字，在再次需要调用到这些操作时，他们才会被执行。</h5>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">&lt;i class&#x3D;&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
+  </nav>
+
 
 
           </div>
@@ -991,7 +871,7 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
-              <p class="site-author-name" itemprop="name">John Doe</p>
+              <p class="site-author-name" itemprop="name">水怪Water-Monster</p>
               <p class="site-description motion-element" itemprop="description"></p>
           </div>
 
@@ -1002,7 +882,7 @@
               
                 <a href="/archives/%20%7C%7C%20archive">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1047,7 +927,7 @@
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
-  <span class="author" itemprop="copyrightHolder">John Doe</span>
+  <span class="author" itemprop="copyrightHolder">水怪Water-Monster</span>
 
   
 </div>
