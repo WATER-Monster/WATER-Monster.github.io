@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我们都知道对索引的优化是 MySQL 优化中相当重要的一环，但很多人对索引的理解其实都很浅，认为它就是一个目标数据的导航，认为无论什么样的查询速度慢，只要加个索引就能解决。我们今天就来讨论下，MySQL 索引优化相关的一些重要的点。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;1.索引的缺点，为什么不能盲目的建立索引。&amp;nbsp;&amp;nbsp;&amp;nb">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mysql 索引">
+<meta property="og:url" content="http://yoursite.com/2020/06/17/617/index.html">
+<meta property="og:site_name" content="水怪Water-Monster">
+<meta property="og:description" content="&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我们都知道对索引的优化是 MySQL 优化中相当重要的一环，但很多人对索引的理解其实都很浅，认为它就是一个目标数据的导航，认为无论什么样的查询速度慢，只要加个索引就能解决。我们今天就来讨论下，MySQL 索引优化相关的一些重要的点。&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;1.索引的缺点，为什么不能盲目的建立索引。&amp;nbsp;&amp;nbsp;&amp;nb">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-06-17T06:52:29.230Z">
+<meta property="article:modified_time" content="2020-06-17T08:17:22.191Z">
+<meta property="article:author" content="水怪Water-Monster">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/17/617/"/>
+
+
+
+
+
+  <title>mysql 索引 | 水怪Water-Monster</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">水怪Water-Monster</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">每日一博</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/17/617/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="水怪Water-Monster">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="水怪Water-Monster">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">mysql 索引</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-17T14:52:29+08:00">
+                2020-06-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/mysql-%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index">
+                    <span itemprop="name">mysql 相关</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h5 id="nbsp-nbsp-nbsp-nbsp-我们都知道对索引的优化是-MySQL-优化中相当重要的一环，但很多人对索引的理解其实都很浅，认为它就是一个目标数据的导航，认为无论什么样的查询速度慢，只要加个索引就能解决。我们今天就来讨论下，MySQL-索引优化相关的一些重要的点。"><a href="#nbsp-nbsp-nbsp-nbsp-我们都知道对索引的优化是-MySQL-优化中相当重要的一环，但很多人对索引的理解其实都很浅，认为它就是一个目标数据的导航，认为无论什么样的查询速度慢，只要加个索引就能解决。我们今天就来讨论下，MySQL-索引优化相关的一些重要的点。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;我们都知道对索引的优化是 MySQL 优化中相当重要的一环，但很多人对索引的理解其实都很浅，认为它就是一个目标数据的导航，认为无论什么样的查询速度慢，只要加个索引就能解决。我们今天就来讨论下，MySQL 索引优化相关的一些重要的点。"></a>&nbsp;&nbsp;&nbsp;&nbsp;我们都知道对索引的优化是 MySQL 优化中相当重要的一环，但很多人对索引的理解其实都很浅，认为它就是一个目标数据的导航，认为无论什么样的查询速度慢，只要加个索引就能解决。我们今天就来讨论下，MySQL 索引优化相关的一些重要的点。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-1-索引的缺点，为什么不能盲目的建立索引。"><a href="#nbsp-nbsp-nbsp-nbsp-1-索引的缺点，为什么不能盲目的建立索引。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;1.索引的缺点，为什么不能盲目的建立索引。"></a>&nbsp;&nbsp;&nbsp;&nbsp;1.索引的缺点，为什么不能盲目的建立索引。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-索引可以大幅提高我们针对索引字段的查找效率，但我们要知道，MySQL-在插入和更新以及删除数据时，同样也需要维护表内的索引。如果你的索引过多，一些不频繁查询的字段也加了索引，就会在插入和更新的时候吃苦头。并且索引其实也是张表，也要占磁盘空间，大量的数据配上大量的索引会急剧增大磁盘的占用量。"><a href="#nbsp-nbsp-nbsp-nbsp-索引可以大幅提高我们针对索引字段的查找效率，但我们要知道，MySQL-在插入和更新以及删除数据时，同样也需要维护表内的索引。如果你的索引过多，一些不频繁查询的字段也加了索引，就会在插入和更新的时候吃苦头。并且索引其实也是张表，也要占磁盘空间，大量的数据配上大量的索引会急剧增大磁盘的占用量。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp; 索引可以大幅提高我们针对索引字段的查找效率，但我们要知道，MySQL 在插入和更新以及删除数据时，同样也需要维护表内的索引。如果你的索引过多，一些不频繁查询的字段也加了索引，就会在插入和更新的时候吃苦头。并且索引其实也是张表，也要占磁盘空间，大量的数据配上大量的索引会急剧增大磁盘的占用量。"></a>&nbsp;&nbsp;&nbsp;&nbsp; 索引可以大幅提高我们针对索引字段的查找效率，但我们要知道，MySQL 在插入和更新以及删除数据时，同样也需要维护表内的索引。如果你的索引过多，一些不频繁查询的字段也加了索引，就会在插入和更新的时候吃苦头。并且索引其实也是张表，也要占磁盘空间，大量的数据配上大量的索引会急剧增大磁盘的占用量。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-2-表之间-join-的时候怎么建立索引？"><a href="#nbsp-nbsp-nbsp-nbsp-2-表之间-join-的时候怎么建立索引？" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;2.表之间 join 的时候怎么建立索引？"></a>&nbsp;&nbsp;&nbsp;&nbsp;2.表之间 join 的时候怎么建立索引？</h5><h5 id="nbsp-nbsp-nbsp-nbsp-如果我们使用-jion-查询表关联数据，而关联字段在左表和右表内都未建立索引，那么我们需要怎样为该字段建立索引，给左表的字段建立？还是给右表的字段建立？或者两个表都建立一个该字段的索引？我们知道-left-join-是左表的全有数据加右表的匹配数据，right-join-则相反，是右表的全有数据加左表的匹配数据。所以我们给-join-查询建立索引的时候，左查询需要给右表字段建立索引，右查询给左表字段建立索引，在-join-查询里给左表或者右表的全有数据加索引是毫无意义的，因为这些全有数据最终都需要提取出来，而另一表的匹配数据如果有索引则能更快定位。"><a href="#nbsp-nbsp-nbsp-nbsp-如果我们使用-jion-查询表关联数据，而关联字段在左表和右表内都未建立索引，那么我们需要怎样为该字段建立索引，给左表的字段建立？还是给右表的字段建立？或者两个表都建立一个该字段的索引？我们知道-left-join-是左表的全有数据加右表的匹配数据，right-join-则相反，是右表的全有数据加左表的匹配数据。所以我们给-join-查询建立索引的时候，左查询需要给右表字段建立索引，右查询给左表字段建立索引，在-join-查询里给左表或者右表的全有数据加索引是毫无意义的，因为这些全有数据最终都需要提取出来，而另一表的匹配数据如果有索引则能更快定位。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;如果我们使用 jion 查询表关联数据，而关联字段在左表和右表内都未建立索引，那么我们需要怎样为该字段建立索引，给左表的字段建立？还是给右表的字段建立？或者两个表都建立一个该字段的索引？我们知道 left join 是左表的全有数据加右表的匹配数据，right join 则相反，是右表的全有数据加左表的匹配数据。所以我们给 join 查询建立索引的时候，左查询需要给右表字段建立索引，右查询给左表字段建立索引，在 join 查询里给左表或者右表的全有数据加索引是毫无意义的，因为这些全有数据最终都需要提取出来，而另一表的匹配数据如果有索引则能更快定位。"></a>&nbsp;&nbsp;&nbsp;&nbsp;如果我们使用 jion 查询表关联数据，而关联字段在左表和右表内都未建立索引，那么我们需要怎样为该字段建立索引，给左表的字段建立？还是给右表的字段建立？或者两个表都建立一个该字段的索引？我们知道 left join 是左表的全有数据加右表的匹配数据，right join 则相反，是右表的全有数据加左表的匹配数据。所以我们给 join 查询建立索引的时候，左查询需要给右表字段建立索引，右查询给左表字段建立索引，在 join 查询里给左表或者右表的全有数据加索引是毫无意义的，因为这些全有数据最终都需要提取出来，而另一表的匹配数据如果有索引则能更快定位。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-3-联合索引怎么建立，联合索引怎么使用？"><a href="#nbsp-nbsp-nbsp-nbsp-3-联合索引怎么建立，联合索引怎么使用？" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;3.联合索引怎么建立，联合索引怎么使用？"></a>&nbsp;&nbsp;&nbsp;&nbsp;3.联合索引怎么建立，联合索引怎么使用？</h5><h5 id="nbsp-nbsp-nbsp-nbsp-在实际业务场景中我们经常会遇到一条查询语句需要对多个字段做筛选的情况，而MySQL在一次查询中只能使用一个索引。这时候我们对单个字段建立的索引就无法覆盖到我们业务中涉及到的所有字段，这条查询语句要优化，就需要建立联合索引。联合索引的建立方式其实很简单，create-index-on-table-col1-col2-col3-即可。联合索引的使用需要遵守一个很重要的原则：查询从索引的最左前列开始且不能跳过索引中的列。这是什么意思呢？我们的语句按-create-index-on-table-col1-col2-col3-建立的联合索引，在-where-后跟-col1-可以走到索引，跟-col1，col2也可以走到索引，跟-col2，-col3-不能走到索引，跟-col1，col3-只能走到-col1-的部分索引。联合索引怎么建立的，就要按怎么样的字段顺序来，从左至右，中间的字段断了缺了都只能走到部分索引，即左边开始按顺序来的字段的有效索引，从断掉的部分开始，后续字段的索引一概用不到。"><a href="#nbsp-nbsp-nbsp-nbsp-在实际业务场景中我们经常会遇到一条查询语句需要对多个字段做筛选的情况，而MySQL在一次查询中只能使用一个索引。这时候我们对单个字段建立的索引就无法覆盖到我们业务中涉及到的所有字段，这条查询语句要优化，就需要建立联合索引。联合索引的建立方式其实很简单，create-index-on-table-col1-col2-col3-即可。联合索引的使用需要遵守一个很重要的原则：查询从索引的最左前列开始且不能跳过索引中的列。这是什么意思呢？我们的语句按-create-index-on-table-col1-col2-col3-建立的联合索引，在-where-后跟-col1-可以走到索引，跟-col1，col2也可以走到索引，跟-col2，-col3-不能走到索引，跟-col1，col3-只能走到-col1-的部分索引。联合索引怎么建立的，就要按怎么样的字段顺序来，从左至右，中间的字段断了缺了都只能走到部分索引，即左边开始按顺序来的字段的有效索引，从断掉的部分开始，后续字段的索引一概用不到。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;在实际业务场景中我们经常会遇到一条查询语句需要对多个字段做筛选的情况，而MySQL在一次查询中只能使用一个索引。这时候我们对单个字段建立的索引就无法覆盖到我们业务中涉及到的所有字段，这条查询语句要优化，就需要建立联合索引。联合索引的建立方式其实很简单，create index on table(col1,col2,col3),即可。联合索引的使用需要遵守一个很重要的原则：查询从索引的最左前列开始且不能跳过索引中的列。这是什么意思呢？我们的语句按 create index on table(col1,col2,col3) 建立的联合索引，在 where 后跟 col1 可以走到索引，跟 col1，col2也可以走到索引，跟 col2， col3 不能走到索引，跟 col1，col3 只能走到 col1 的部分索引。联合索引怎么建立的，就要按怎么样的字段顺序来，从左至右，中间的字段断了缺了都只能走到部分索引，即左边开始按顺序来的字段的有效索引，从断掉的部分开始，后续字段的索引一概用不到。"></a>&nbsp;&nbsp;&nbsp;&nbsp;在实际业务场景中我们经常会遇到一条查询语句需要对多个字段做筛选的情况，而MySQL在一次查询中只能使用一个索引。这时候我们对单个字段建立的索引就无法覆盖到我们业务中涉及到的所有字段，这条查询语句要优化，就需要建立联合索引。联合索引的建立方式其实很简单，create index on table(col1,col2,col3),即可。联合索引的使用需要遵守一个很重要的原则：查询从索引的最左前列开始且不能跳过索引中的列。这是什么意思呢？我们的语句按 create index on table(col1,col2,col3) 建立的联合索引，在 where 后跟 col1 可以走到索引，跟 col1，col2也可以走到索引，跟 col2， col3 不能走到索引，跟 col1，col3 只能走到 col1 的部分索引。联合索引怎么建立的，就要按怎么样的字段顺序来，从左至右，中间的字段断了缺了都只能走到部分索引，即左边开始按顺序来的字段的有效索引，从断掉的部分开始，后续字段的索引一概用不到。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-4-不要在索引的字段上做操作。"><a href="#nbsp-nbsp-nbsp-nbsp-4-不要在索引的字段上做操作。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;4.不要在索引的字段上做操作。"></a>&nbsp;&nbsp;&nbsp;&nbsp;4.不要在索引的字段上做操作。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-这句话是什么意思呢，假设我的-col1-是有索引的字段，但我的-sql-语句是这么写的：select-col1-from-table-where-LCASE-col1-‘xxx’。这样的-sql-语句的-col1-列的索引是无效的，MySQL这时会走全表扫描。"><a href="#nbsp-nbsp-nbsp-nbsp-这句话是什么意思呢，假设我的-col1-是有索引的字段，但我的-sql-语句是这么写的：select-col1-from-table-where-LCASE-col1-‘xxx’。这样的-sql-语句的-col1-列的索引是无效的，MySQL这时会走全表扫描。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;这句话是什么意思呢，假设我的 col1 是有索引的字段，但我的 sql 语句是这么写的：select col1 from table where LCASE(col1) = ‘xxx’。这样的 sql 语句的 col1 列的索引是无效的，MySQL这时会走全表扫描。"></a>&nbsp;&nbsp;&nbsp;&nbsp;这句话是什么意思呢，假设我的 col1 是有索引的字段，但我的 sql 语句是这么写的：select col1 from table where LCASE(col1) = ‘xxx’。这样的 sql 语句的 col1 列的索引是无效的，MySQL这时会走全表扫描。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-5-少使用-‘-gt-lt-’-这类的操作符。"><a href="#nbsp-nbsp-nbsp-nbsp-5-少使用-‘-gt-lt-’-这类的操作符。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;5.少使用 ‘&gt; &lt; !=’ 这类的操作符。"></a>&nbsp;&nbsp;&nbsp;&nbsp;5.少使用 ‘&gt; &lt; !=’ 这类的操作符。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-涉及到范围查询的时候，单个字段的索引通常不会有太大问题，但是对于联合索引，即便你遵循了联合索引的最左原则（就是上面讲的），遇到比较类操作符的时候，做比较类操作的字段的后续字段的索引会全部失效。仍然以上面我们的联合索引-create-index-on-table-col1-col2-col3-为例，如果我们的-sql-后段是-where-col1-‘xxx’-and-col2-gt-‘xxx’-and-col3-‘xxx’，那么从-col3-开始，包括-col3-本身，他们的索引是用不到的。在使用联合索引的时候，一定要留意你的范围查找操作，必要的时候可以置换联合索引顺序，将你必须要使用范围查询的字段放在联合索引的最后。"><a href="#nbsp-nbsp-nbsp-nbsp-涉及到范围查询的时候，单个字段的索引通常不会有太大问题，但是对于联合索引，即便你遵循了联合索引的最左原则（就是上面讲的），遇到比较类操作符的时候，做比较类操作的字段的后续字段的索引会全部失效。仍然以上面我们的联合索引-create-index-on-table-col1-col2-col3-为例，如果我们的-sql-后段是-where-col1-‘xxx’-and-col2-gt-‘xxx’-and-col3-‘xxx’，那么从-col3-开始，包括-col3-本身，他们的索引是用不到的。在使用联合索引的时候，一定要留意你的范围查找操作，必要的时候可以置换联合索引顺序，将你必须要使用范围查询的字段放在联合索引的最后。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;涉及到范围查询的时候，单个字段的索引通常不会有太大问题，但是对于联合索引，即便你遵循了联合索引的最左原则（就是上面讲的），遇到比较类操作符的时候，做比较类操作的字段的后续字段的索引会全部失效。仍然以上面我们的联合索引 create index on table(col1,col2,col3) 为例，如果我们的 sql 后段是 where col1 = ‘xxx’ and col2 &gt; ‘xxx’ and col3 = ‘xxx’，那么从 col3 开始，包括 col3 本身，他们的索引是用不到的。在使用联合索引的时候，一定要留意你的范围查找操作，必要的时候可以置换联合索引顺序，将你必须要使用范围查询的字段放在联合索引的最后。"></a>&nbsp;&nbsp;&nbsp;&nbsp;涉及到范围查询的时候，单个字段的索引通常不会有太大问题，但是对于联合索引，即便你遵循了联合索引的最左原则（就是上面讲的），遇到比较类操作符的时候，做比较类操作的字段的后续字段的索引会全部失效。仍然以上面我们的联合索引 create index on table(col1,col2,col3) 为例，如果我们的 sql 后段是 where col1 = ‘xxx’ and col2 &gt; ‘xxx’ and col3 = ‘xxx’，那么从 col3 开始，包括 col3 本身，他们的索引是用不到的。在使用联合索引的时候，一定要留意你的范围查找操作，必要的时候可以置换联合索引顺序，将你必须要使用范围查询的字段放在联合索引的最后。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-6-like通配符以-开头无法走到索引。什么是覆盖索引。"><a href="#nbsp-nbsp-nbsp-nbsp-6-like通配符以-开头无法走到索引。什么是覆盖索引。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;6.like通配符以%开头无法走到索引。什么是覆盖索引。"></a>&nbsp;&nbsp;&nbsp;&nbsp;6.like通配符以%开头无法走到索引。什么是覆盖索引。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-这个其实绝大多数人都知道，模糊匹配如果直接以-开头匹配是走不到索引的。不过其实有一个解决方案，就是使用覆盖索引。什么叫覆盖索引？就是指一个查询语句的执行只用从索引中就能够取得，不必从数据表中读取，比如-select-col1，-col2-from-table-where-col1-xxx-and-col2-like-‘-xx-’，如果我们像上述那样有col1，-col2，-col3-的联合索引在，那么这条语句就可以走到覆盖索引，即便我们的-col2-模糊查询是从-开始匹配的，它的查询也能被我们的联合索引所覆盖。"><a href="#nbsp-nbsp-nbsp-nbsp-这个其实绝大多数人都知道，模糊匹配如果直接以-开头匹配是走不到索引的。不过其实有一个解决方案，就是使用覆盖索引。什么叫覆盖索引？就是指一个查询语句的执行只用从索引中就能够取得，不必从数据表中读取，比如-select-col1，-col2-from-table-where-col1-xxx-and-col2-like-‘-xx-’，如果我们像上述那样有col1，-col2，-col3-的联合索引在，那么这条语句就可以走到覆盖索引，即便我们的-col2-模糊查询是从-开始匹配的，它的查询也能被我们的联合索引所覆盖。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;这个其实绝大多数人都知道，模糊匹配如果直接以 % 开头匹配是走不到索引的。不过其实有一个解决方案，就是使用覆盖索引。什么叫覆盖索引？就是指一个查询语句的执行只用从索引中就能够取得，不必从数据表中读取，比如 select col1， col2 from table where col1 = xxx and col2 like ‘%xx%’，如果我们像上述那样有col1， col2， col3 的联合索引在，那么这条语句就可以走到覆盖索引，即便我们的 col2 模糊查询是从 % 开始匹配的，它的查询也能被我们的联合索引所覆盖。"></a>&nbsp;&nbsp;&nbsp;&nbsp;这个其实绝大多数人都知道，模糊匹配如果直接以 % 开头匹配是走不到索引的。不过其实有一个解决方案，就是使用覆盖索引。什么叫覆盖索引？就是指一个查询语句的执行只用从索引中就能够取得，不必从数据表中读取，比如 select col1， col2 from table where col1 = xxx and col2 like ‘%xx%’，如果我们像上述那样有col1， col2， col3 的联合索引在，那么这条语句就可以走到覆盖索引，即便我们的 col2 模糊查询是从 % 开始匹配的，它的查询也能被我们的联合索引所覆盖。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-索引的优化其实还远不止这些，我会慢慢的在以后的博客里讨论到。"><a href="#nbsp-nbsp-nbsp-nbsp-索引的优化其实还远不止这些，我会慢慢的在以后的博客里讨论到。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;索引的优化其实还远不止这些，我会慢慢的在以后的博客里讨论到。"></a>&nbsp;&nbsp;&nbsp;&nbsp;索引的优化其实还远不止这些，我会慢慢的在以后的博客里讨论到。</h5>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/16/616/" rel="next" title="kafka group">
+                <i class="fa fa-chevron-left"></i> kafka group
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">水怪Water-Monster</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-我们都知道对索引的优化是-MySQL-优化中相当重要的一环，但很多人对索引的理解其实都很浅，认为它就是一个目标数据的导航，认为无论什么样的查询速度慢，只要加个索引就能解决。我们今天就来讨论下，MySQL-索引优化相关的一些重要的点。"><span class="nav-number">1.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我们都知道对索引的优化是 MySQL 优化中相当重要的一环，但很多人对索引的理解其实都很浅，认为它就是一个目标数据的导航，认为无论什么样的查询速度慢，只要加个索引就能解决。我们今天就来讨论下，MySQL 索引优化相关的一些重要的点。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-1-索引的缺点，为什么不能盲目的建立索引。"><span class="nav-number">2.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;1.索引的缺点，为什么不能盲目的建立索引。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-索引可以大幅提高我们针对索引字段的查找效率，但我们要知道，MySQL-在插入和更新以及删除数据时，同样也需要维护表内的索引。如果你的索引过多，一些不频繁查询的字段也加了索引，就会在插入和更新的时候吃苦头。并且索引其实也是张表，也要占磁盘空间，大量的数据配上大量的索引会急剧增大磁盘的占用量。"><span class="nav-number">3.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 索引可以大幅提高我们针对索引字段的查找效率，但我们要知道，MySQL 在插入和更新以及删除数据时，同样也需要维护表内的索引。如果你的索引过多，一些不频繁查询的字段也加了索引，就会在插入和更新的时候吃苦头。并且索引其实也是张表，也要占磁盘空间，大量的数据配上大量的索引会急剧增大磁盘的占用量。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-2-表之间-join-的时候怎么建立索引？"><span class="nav-number">4.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;2.表之间 join 的时候怎么建立索引？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-如果我们使用-jion-查询表关联数据，而关联字段在左表和右表内都未建立索引，那么我们需要怎样为该字段建立索引，给左表的字段建立？还是给右表的字段建立？或者两个表都建立一个该字段的索引？我们知道-left-join-是左表的全有数据加右表的匹配数据，right-join-则相反，是右表的全有数据加左表的匹配数据。所以我们给-join-查询建立索引的时候，左查询需要给右表字段建立索引，右查询给左表字段建立索引，在-join-查询里给左表或者右表的全有数据加索引是毫无意义的，因为这些全有数据最终都需要提取出来，而另一表的匹配数据如果有索引则能更快定位。"><span class="nav-number">5.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;如果我们使用 jion 查询表关联数据，而关联字段在左表和右表内都未建立索引，那么我们需要怎样为该字段建立索引，给左表的字段建立？还是给右表的字段建立？或者两个表都建立一个该字段的索引？我们知道 left join 是左表的全有数据加右表的匹配数据，right join 则相反，是右表的全有数据加左表的匹配数据。所以我们给 join 查询建立索引的时候，左查询需要给右表字段建立索引，右查询给左表字段建立索引，在 join 查询里给左表或者右表的全有数据加索引是毫无意义的，因为这些全有数据最终都需要提取出来，而另一表的匹配数据如果有索引则能更快定位。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-3-联合索引怎么建立，联合索引怎么使用？"><span class="nav-number">6.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;3.联合索引怎么建立，联合索引怎么使用？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-在实际业务场景中我们经常会遇到一条查询语句需要对多个字段做筛选的情况，而MySQL在一次查询中只能使用一个索引。这时候我们对单个字段建立的索引就无法覆盖到我们业务中涉及到的所有字段，这条查询语句要优化，就需要建立联合索引。联合索引的建立方式其实很简单，create-index-on-table-col1-col2-col3-即可。联合索引的使用需要遵守一个很重要的原则：查询从索引的最左前列开始且不能跳过索引中的列。这是什么意思呢？我们的语句按-create-index-on-table-col1-col2-col3-建立的联合索引，在-where-后跟-col1-可以走到索引，跟-col1，col2也可以走到索引，跟-col2，-col3-不能走到索引，跟-col1，col3-只能走到-col1-的部分索引。联合索引怎么建立的，就要按怎么样的字段顺序来，从左至右，中间的字段断了缺了都只能走到部分索引，即左边开始按顺序来的字段的有效索引，从断掉的部分开始，后续字段的索引一概用不到。"><span class="nav-number">7.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在实际业务场景中我们经常会遇到一条查询语句需要对多个字段做筛选的情况，而MySQL在一次查询中只能使用一个索引。这时候我们对单个字段建立的索引就无法覆盖到我们业务中涉及到的所有字段，这条查询语句要优化，就需要建立联合索引。联合索引的建立方式其实很简单，create index on table(col1,col2,col3),即可。联合索引的使用需要遵守一个很重要的原则：查询从索引的最左前列开始且不能跳过索引中的列。这是什么意思呢？我们的语句按 create index on table(col1,col2,col3) 建立的联合索引，在 where 后跟 col1 可以走到索引，跟 col1，col2也可以走到索引，跟 col2， col3 不能走到索引，跟 col1，col3 只能走到 col1 的部分索引。联合索引怎么建立的，就要按怎么样的字段顺序来，从左至右，中间的字段断了缺了都只能走到部分索引，即左边开始按顺序来的字段的有效索引，从断掉的部分开始，后续字段的索引一概用不到。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-4-不要在索引的字段上做操作。"><span class="nav-number">8.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;4.不要在索引的字段上做操作。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-这句话是什么意思呢，假设我的-col1-是有索引的字段，但我的-sql-语句是这么写的：select-col1-from-table-where-LCASE-col1-‘xxx’。这样的-sql-语句的-col1-列的索引是无效的，MySQL这时会走全表扫描。"><span class="nav-number">9.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这句话是什么意思呢，假设我的 col1 是有索引的字段，但我的 sql 语句是这么写的：select col1 from table where LCASE(col1) &#x3D; ‘xxx’。这样的 sql 语句的 col1 列的索引是无效的，MySQL这时会走全表扫描。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-5-少使用-‘-gt-lt-’-这类的操作符。"><span class="nav-number">10.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;5.少使用 ‘&gt; &lt; !&#x3D;’ 这类的操作符。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-涉及到范围查询的时候，单个字段的索引通常不会有太大问题，但是对于联合索引，即便你遵循了联合索引的最左原则（就是上面讲的），遇到比较类操作符的时候，做比较类操作的字段的后续字段的索引会全部失效。仍然以上面我们的联合索引-create-index-on-table-col1-col2-col3-为例，如果我们的-sql-后段是-where-col1-‘xxx’-and-col2-gt-‘xxx’-and-col3-‘xxx’，那么从-col3-开始，包括-col3-本身，他们的索引是用不到的。在使用联合索引的时候，一定要留意你的范围查找操作，必要的时候可以置换联合索引顺序，将你必须要使用范围查询的字段放在联合索引的最后。"><span class="nav-number">11.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;涉及到范围查询的时候，单个字段的索引通常不会有太大问题，但是对于联合索引，即便你遵循了联合索引的最左原则（就是上面讲的），遇到比较类操作符的时候，做比较类操作的字段的后续字段的索引会全部失效。仍然以上面我们的联合索引 create index on table(col1,col2,col3) 为例，如果我们的 sql 后段是 where col1 &#x3D; ‘xxx’ and col2 &gt; ‘xxx’ and col3 &#x3D; ‘xxx’，那么从 col3 开始，包括 col3 本身，他们的索引是用不到的。在使用联合索引的时候，一定要留意你的范围查找操作，必要的时候可以置换联合索引顺序，将你必须要使用范围查询的字段放在联合索引的最后。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-6-like通配符以-开头无法走到索引。什么是覆盖索引。"><span class="nav-number">12.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;6.like通配符以%开头无法走到索引。什么是覆盖索引。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-这个其实绝大多数人都知道，模糊匹配如果直接以-开头匹配是走不到索引的。不过其实有一个解决方案，就是使用覆盖索引。什么叫覆盖索引？就是指一个查询语句的执行只用从索引中就能够取得，不必从数据表中读取，比如-select-col1，-col2-from-table-where-col1-xxx-and-col2-like-‘-xx-’，如果我们像上述那样有col1，-col2，-col3-的联合索引在，那么这条语句就可以走到覆盖索引，即便我们的-col2-模糊查询是从-开始匹配的，它的查询也能被我们的联合索引所覆盖。"><span class="nav-number">13.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这个其实绝大多数人都知道，模糊匹配如果直接以 % 开头匹配是走不到索引的。不过其实有一个解决方案，就是使用覆盖索引。什么叫覆盖索引？就是指一个查询语句的执行只用从索引中就能够取得，不必从数据表中读取，比如 select col1， col2 from table where col1 &#x3D; xxx and col2 like ‘%xx%’，如果我们像上述那样有col1， col2， col3 的联合索引在，那么这条语句就可以走到覆盖索引，即便我们的 col2 模糊查询是从 % 开始匹配的，它的查询也能被我们的联合索引所覆盖。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-索引的优化其实还远不止这些，我会慢慢的在以后的博客里讨论到。"><span class="nav-number">14.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;索引的优化其实还远不止这些，我会慢慢的在以后的博客里讨论到。</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">水怪Water-Monster</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
