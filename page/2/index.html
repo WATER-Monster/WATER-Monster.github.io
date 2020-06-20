@@ -219,6 +219,155 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/13/613/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="水怪Water-Monster">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="水怪Water-Monster">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/13/613/" itemprop="url">Python 基础</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-13T13:50:56+08:00">
+                2020-06-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Python-%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index">
+                    <span itemprop="name">Python 基础</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="python-web-开发-经验知识分享"><a href="#python-web-开发-经验知识分享" class="headerlink" title="python web 开发 经验知识分享"></a>python web 开发 经验知识分享</h3><h3 id="为什么-列表推导式-会比普通的-for循环-更快？"><a href="#为什么-列表推导式-会比普通的-for循环-更快？" class="headerlink" title="为什么 列表推导式 会比普通的 for循环 更快？"></a>为什么 列表推导式 会比普通的 for循环 更快？</h3><h5 id="我们都知道，python-的-for循环-的效率其实是相当慢的，在使用for生成一个列表时，使用列表推导式会比直接写一个for快很多，但是这是为什么呢？"><a href="#我们都知道，python-的-for循环-的效率其实是相当慢的，在使用for生成一个列表时，使用列表推导式会比直接写一个for快很多，但是这是为什么呢？" class="headerlink" title="我们都知道，python 的 for循环 的效率其实是相当慢的，在使用for生成一个列表时，使用列表推导式会比直接写一个for快很多，但是这是为什么呢？"></a>我们都知道，python 的 for循环 的效率其实是相当慢的，在使用for生成一个列表时，使用列表推导式会比直接写一个for快很多，但是这是为什么呢？</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">()</span>:</span></span><br><span class="line">    list1 = list()</span><br><span class="line">    a = time.time()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100000</span>):</span><br><span class="line">        list1.append(i)</span><br><span class="line">    b = time.time()</span><br><span class="line">    print(b-a)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">()</span>:</span></span><br><span class="line">    a = time.time()</span><br><span class="line">    list2 = [x <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">100000</span>)]</span><br><span class="line">    b = time.time()</span><br><span class="line">    print(b-a)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    func1()</span><br><span class="line">    func2()</span><br><span class="line"></span><br><span class="line"><span class="number">0.007978439331054688</span></span><br><span class="line"><span class="number">0.0029921531677246094</span></span><br></pre></td></tr></table></figure>
+
+<h5 id="nbsp-nbsp-nbsp-nbsp-我们先来介绍下-python-的一个模块，dis模块。dis-模块可以对你的-python-程序进行反汇编，生成字节码指令，我们可以使用这个模块，我们可以写一个简单的函数，然后使用-dis模块来看一看一个python函数在被执行时到底做了哪些事。"><a href="#nbsp-nbsp-nbsp-nbsp-我们先来介绍下-python-的一个模块，dis模块。dis-模块可以对你的-python-程序进行反汇编，生成字节码指令，我们可以使用这个模块，我们可以写一个简单的函数，然后使用-dis模块来看一看一个python函数在被执行时到底做了哪些事。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;我们先来介绍下 python 的一个模块，dis模块。dis 模块可以对你的 python 程序进行反汇编，生成字节码指令，我们可以使用这个模块，我们可以写一个简单的函数，然后使用 dis模块来看一看一个python函数在被执行时到底做了哪些事。"></a>&nbsp;&nbsp;&nbsp;&nbsp;我们先来介绍下 python 的一个模块，dis模块。dis 模块可以对你的 python 程序进行反汇编，生成字节码指令，我们可以使用这个模块，我们可以写一个简单的函数，然后使用 dis模块来看一看一个python函数在被执行时到底做了哪些事。</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> time</span><br><span class="line"><span class="keyword">import</span> dis</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">()</span>:</span></span><br><span class="line">    list1 = list()</span><br><span class="line">    a = time.time()</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100000</span>):</span><br><span class="line">        list1.append(i)</span><br><span class="line">    b = time.time()</span><br><span class="line">    print(b-a)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">()</span>:</span></span><br><span class="line">    a = time.time()</span><br><span class="line">    list2 = [x <span class="keyword">for</span> x <span class="keyword">in</span> range(<span class="number">100000</span>)]</span><br><span class="line">    b = time.time()</span><br><span class="line">    print(b-a)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment"># func1()</span></span><br><span class="line">    <span class="comment"># func2()</span></span><br><span class="line">    dis.dis(func1)</span><br><span class="line">    dis.dis(func2)</span><br></pre></td></tr></table></figure>
+
+<h5 id="nbsp-nbsp-nbsp-nbsp-这是-func1-在第七行走for循环时的字节码指令。"><a href="#nbsp-nbsp-nbsp-nbsp-这是-func1-在第七行走for循环时的字节码指令。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;这是 func1 在第七行走for循环时的字节码指令。"></a>&nbsp;&nbsp;&nbsp;&nbsp;这是 func1 在第七行走for循环时的字节码指令。</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">7          14 SETUP_LOOP              26 (to 42)</span><br><span class="line">           16 LOAD_GLOBAL              2 (range)</span><br><span class="line">           18 LOAD_CONST               1 (100000)</span><br><span class="line">           20 CALL_FUNCTION            1</span><br><span class="line">           22 GET_ITER</span><br><span class="line">      &gt;&gt;   24 FOR_ITER                14 (to 40)</span><br><span class="line">           26 STORE_FAST               2 (i)</span><br></pre></td></tr></table></figure>
+
+<h5 id="nbsp-nbsp-nbsp-nbsp-这是-func2-在第十四行列表推导式时的字节码指令。"><a href="#nbsp-nbsp-nbsp-nbsp-这是-func2-在第十四行列表推导式时的字节码指令。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;这是 func2 在第十四行列表推导式时的字节码指令。"></a>&nbsp;&nbsp;&nbsp;&nbsp;这是 func2 在第十四行列表推导式时的字节码指令。</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">14           8 LOAD_CONST               1 (&lt;code object &lt;listcomp&gt; at 0x000001CB49A01ED0, file &quot;C:&#x2F;Users&#x2F;Ray&#x2F;Desktop&#x2F;test2.py&quot;, line 14&gt;)</span><br><span class="line">            10 LOAD_CONST               2 (&#39;func2.&lt;locals&gt;.&lt;listcomp&gt;&#39;)</span><br><span class="line">            12 MAKE_FUNCTION            0</span><br><span class="line">            14 LOAD_GLOBAL              1 (range)</span><br><span class="line">            16 LOAD_CONST               3 (100000)</span><br><span class="line">            18 CALL_FUNCTION            1</span><br><span class="line">            20 GET_ITER</span><br><span class="line">            22 CALL_FUNCTION            1</span><br><span class="line">            24 STORE_FAST               1 (list2)</span><br></pre></td></tr></table></figure>
+
+<h5 id="nbsp-nbsp-nbsp-nbsp-我惊讶的发现，3-6的python在走列表推导式的时候甚至没有做-FOR-ITER-，即for循环迭代。我在这之前看到有人说过，‘python-在列表推导中直接使用了‘LIST-APPEND’这个字节码来实现-append-功能，效率相当的高。而在-for-循环中每次循环都要先载入-append-这个属性然后再-‘CALL-FUNCTION’一下。这样势必就会慢了很多。’-但他测试的版本应该是基于python2，现在看来在-python3-中列表推导式连自己-iter-一遍都不需要了，直接用源列表的-generater-生成自己的新列表。"><a href="#nbsp-nbsp-nbsp-nbsp-我惊讶的发现，3-6的python在走列表推导式的时候甚至没有做-FOR-ITER-，即for循环迭代。我在这之前看到有人说过，‘python-在列表推导中直接使用了‘LIST-APPEND’这个字节码来实现-append-功能，效率相当的高。而在-for-循环中每次循环都要先载入-append-这个属性然后再-‘CALL-FUNCTION’一下。这样势必就会慢了很多。’-但他测试的版本应该是基于python2，现在看来在-python3-中列表推导式连自己-iter-一遍都不需要了，直接用源列表的-generater-生成自己的新列表。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;我惊讶的发现，3.6的python在走列表推导式的时候甚至没有做 FOR_ITER ，即for循环迭代。我在这之前看到有人说过，‘python 在列表推导中直接使用了‘LIST_APPEND’这个字节码来实现 append 功能，效率相当的高。而在 for 循环中每次循环都要先载入 append 这个属性然后再 ‘CALL_FUNCTION’一下。这样势必就会慢了很多。’ 但他测试的版本应该是基于python2，现在看来在 python3 中列表推导式连自己 iter 一遍都不需要了，直接用源列表的 generater 生成自己的新列表。"></a>&nbsp;&nbsp;&nbsp;&nbsp;我惊讶的发现，3.6的python在走列表推导式的时候甚至没有做 FOR_ITER ，即for循环迭代。我在这之前看到有人说过，‘python 在列表推导中直接使用了‘LIST_APPEND’这个字节码来实现 append 功能，效率相当的高。而在 for 循环中每次循环都要先载入 append 这个属性然后再 ‘CALL_FUNCTION’一下。这样势必就会慢了很多。’ 但他测试的版本应该是基于python2，现在看来在 python3 中列表推导式连自己 iter 一遍都不需要了，直接用源列表的 generater 生成自己的新列表。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-这个结论目前还有待推敲，但我们可以知道，python3-在-python2-的基础上使用生成器改变了for循环确实带来了很大的变革。列表推导式的生成方式比直接写for循环的效率要高出很多，这恐怕不仅仅是-LIST-APPEND-这个层面上的区别，更是-python3-for循环遍历使用-generater-即生成器带来的优化。"><a href="#nbsp-nbsp-nbsp-nbsp-这个结论目前还有待推敲，但我们可以知道，python3-在-python2-的基础上使用生成器改变了for循环确实带来了很大的变革。列表推导式的生成方式比直接写for循环的效率要高出很多，这恐怕不仅仅是-LIST-APPEND-这个层面上的区别，更是-python3-for循环遍历使用-generater-即生成器带来的优化。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;这个结论目前还有待推敲，但我们可以知道，python3 在 python2 的基础上使用生成器改变了for循环确实带来了很大的变革。列表推导式的生成方式比直接写for循环的效率要高出很多，这恐怕不仅仅是 LIST_APPEND 这个层面上的区别，更是 python3 for循环遍历使用 generater 即生成器带来的优化。"></a>&nbsp;&nbsp;&nbsp;&nbsp;这个结论目前还有待推敲，但我们可以知道，python3 在 python2 的基础上使用生成器改变了for循环确实带来了很大的变革。列表推导式的生成方式比直接写for循环的效率要高出很多，这恐怕不仅仅是 LIST_APPEND 这个层面上的区别，更是 python3 for循环遍历使用 generater 即生成器带来的优化。</h5>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/07/article-2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -834,7 +983,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -845,7 +994,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
