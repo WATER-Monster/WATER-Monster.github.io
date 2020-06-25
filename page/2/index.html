@@ -219,6 +219,151 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/14/614/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="水怪Water-Monster">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="水怪Water-Monster">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/06/14/614/" itemprop="url">kafka 相关</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-14T16:20:40+08:00">
+                2020-06-14
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/kafka-%E7%9B%B8%E5%85%B3/" itemprop="url" rel="index">
+                    <span itemprop="name">kafka 相关</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h3 id="web-开发-经验知识分享"><a href="#web-开发-经验知识分享" class="headerlink" title="web 开发 经验知识分享"></a>web 开发 经验知识分享</h3><h3 id="kafka-相关"><a href="#kafka-相关" class="headerlink" title="kafka 相关"></a>kafka 相关</h3><h5 id="nbsp-nbsp-nbsp-nbsp-最近经常会被问到一个问题，为什么我们需要一个消息队列，消息队列它好在哪里？"><a href="#nbsp-nbsp-nbsp-nbsp-最近经常会被问到一个问题，为什么我们需要一个消息队列，消息队列它好在哪里？" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;最近经常会被问到一个问题，为什么我们需要一个消息队列，消息队列它好在哪里？"></a>&nbsp;&nbsp;&nbsp;&nbsp;最近经常会被问到一个问题，为什么我们需要一个消息队列，消息队列它好在哪里？</h5><h5 id="nbsp-nbsp-nbsp-nbsp-通常来说，消息队列可以应用于以下三个场景："><a href="#nbsp-nbsp-nbsp-nbsp-通常来说，消息队列可以应用于以下三个场景：" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;通常来说，消息队列可以应用于以下三个场景："></a>&nbsp;&nbsp;&nbsp;&nbsp;通常来说，消息队列可以应用于以下三个场景：</h5><h4 id="nbsp-nbsp-nbsp-nbsp-1-解耦消息的生产和消费。"><a href="#nbsp-nbsp-nbsp-nbsp-1-解耦消息的生产和消费。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;1.解耦消息的生产和消费。"></a>&nbsp;&nbsp;&nbsp;&nbsp;1.解耦消息的生产和消费。</h4><h4 id="nbsp-nbsp-nbsp-nbsp-2-缓冲。"><a href="#nbsp-nbsp-nbsp-nbsp-2-缓冲。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;2.缓冲。"></a>&nbsp;&nbsp;&nbsp;&nbsp;2.缓冲。</h4><h4 id="nbsp-nbsp-nbsp-nbsp-3-不同模块之间的通讯。"><a href="#nbsp-nbsp-nbsp-nbsp-3-不同模块之间的通讯。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;3.不同模块之间的通讯。"></a>&nbsp;&nbsp;&nbsp;&nbsp;3.不同模块之间的通讯。</h4><h5 id="nbsp-nbsp-nbsp-nbsp-我们在涉及到邮件发送，短信发送这样的功能时，通常不会把它们就这么写进你的API逻辑内部。为什么？因为这类发布性质的功能写在API内部不仅会造成你的代码冗长，而且会拖累API的响应速度。那我们需要把它们写在哪？写一个脚本让API每次去调用吗？这样也行，但我们通常会采取更聪明的做法，那就是使用消息队列。我们在API内部向消息队列里“生产”我们需要做的发布类任务，把完成这一功能的实际代码写在一个循环中，循环读取消息队列内部被添加的任务，一旦读取到了，再去执行发布逻辑。这样的解耦，可以使我们的代码可读性更强，拆分性更好。"><a href="#nbsp-nbsp-nbsp-nbsp-我们在涉及到邮件发送，短信发送这样的功能时，通常不会把它们就这么写进你的API逻辑内部。为什么？因为这类发布性质的功能写在API内部不仅会造成你的代码冗长，而且会拖累API的响应速度。那我们需要把它们写在哪？写一个脚本让API每次去调用吗？这样也行，但我们通常会采取更聪明的做法，那就是使用消息队列。我们在API内部向消息队列里“生产”我们需要做的发布类任务，把完成这一功能的实际代码写在一个循环中，循环读取消息队列内部被添加的任务，一旦读取到了，再去执行发布逻辑。这样的解耦，可以使我们的代码可读性更强，拆分性更好。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;我们在涉及到邮件发送，短信发送这样的功能时，通常不会把它们就这么写进你的API逻辑内部。为什么？因为这类发布性质的功能写在API内部不仅会造成你的代码冗长，而且会拖累API的响应速度。那我们需要把它们写在哪？写一个脚本让API每次去调用吗？这样也行，但我们通常会采取更聪明的做法，那就是使用消息队列。我们在API内部向消息队列里“生产”我们需要做的发布类任务，把完成这一功能的实际代码写在一个循环中，循环读取消息队列内部被添加的任务，一旦读取到了，再去执行发布逻辑。这样的解耦，可以使我们的代码可读性更强，拆分性更好。"></a>&nbsp;&nbsp;&nbsp;&nbsp;我们在涉及到邮件发送，短信发送这样的功能时，通常不会把它们就这么写进你的API逻辑内部。为什么？因为这类发布性质的功能写在API内部不仅会造成你的代码冗长，而且会拖累API的响应速度。那我们需要把它们写在哪？写一个脚本让API每次去调用吗？这样也行，但我们通常会采取更聪明的做法，那就是使用消息队列。我们在API内部向消息队列里“生产”我们需要做的发布类任务，把完成这一功能的实际代码写在一个循环中，循环读取消息队列内部被添加的任务，一旦读取到了，再去执行发布逻辑。这样的解耦，可以使我们的代码可读性更强，拆分性更好。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-消息队列的另一大用法，就是用来缓冲高发数据。想象一下，如果我们某个接口大量产生数据入库的请求，我们在同一时间内执行这些请求，将一大堆数据塞进数据库，数据库此时负荷的住吗？单机情况下可能就直接爆了，结果就是会有请求超时，数据无法入库的情况。这种情况下，我们就需要使用消息队列去“化峰”，将高峰请求量吞下来，再后续慢慢吐给数据库，这就是一个缓冲的过程。"><a href="#nbsp-nbsp-nbsp-nbsp-消息队列的另一大用法，就是用来缓冲高发数据。想象一下，如果我们某个接口大量产生数据入库的请求，我们在同一时间内执行这些请求，将一大堆数据塞进数据库，数据库此时负荷的住吗？单机情况下可能就直接爆了，结果就是会有请求超时，数据无法入库的情况。这种情况下，我们就需要使用消息队列去“化峰”，将高峰请求量吞下来，再后续慢慢吐给数据库，这就是一个缓冲的过程。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;消息队列的另一大用法，就是用来缓冲高发数据。想象一下，如果我们某个接口大量产生数据入库的请求，我们在同一时间内执行这些请求，将一大堆数据塞进数据库，数据库此时负荷的住吗？单机情况下可能就直接爆了，结果就是会有请求超时，数据无法入库的情况。这种情况下，我们就需要使用消息队列去“化峰”，将高峰请求量吞下来，再后续慢慢吐给数据库，这就是一个缓冲的过程。"></a>&nbsp;&nbsp;&nbsp;&nbsp;消息队列的另一大用法，就是用来缓冲高发数据。想象一下，如果我们某个接口大量产生数据入库的请求，我们在同一时间内执行这些请求，将一大堆数据塞进数据库，数据库此时负荷的住吗？单机情况下可能就直接爆了，结果就是会有请求超时，数据无法入库的情况。这种情况下，我们就需要使用消息队列去“化峰”，将高峰请求量吞下来，再后续慢慢吐给数据库，这就是一个缓冲的过程。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-最后一种用法，比较简单，但也非常常见。我的A模块与B模块是两个不相干的模块，但现在有个功能需要实现A向B传递数据，我们怎么做？暴力一点的人会说，模块都在同一个项目里，直接用A去调B吧！那如果不是同一个项目呢？这时肯定就会有人提出，那我们发一个Http请求吧。但是谁来保证这个请求一定能发送成功呢？如果要做失败重发，那不是还要多写一大堆逻辑？这个时候，消息队列也可以承担这个模块中间人的功能，A向消息队列写入数据，由B去消费，中间的担保人是消息队列，A-B的模块都不需要额外添加功能，岂不美哉？"><a href="#nbsp-nbsp-nbsp-nbsp-最后一种用法，比较简单，但也非常常见。我的A模块与B模块是两个不相干的模块，但现在有个功能需要实现A向B传递数据，我们怎么做？暴力一点的人会说，模块都在同一个项目里，直接用A去调B吧！那如果不是同一个项目呢？这时肯定就会有人提出，那我们发一个Http请求吧。但是谁来保证这个请求一定能发送成功呢？如果要做失败重发，那不是还要多写一大堆逻辑？这个时候，消息队列也可以承担这个模块中间人的功能，A向消息队列写入数据，由B去消费，中间的担保人是消息队列，A-B的模块都不需要额外添加功能，岂不美哉？" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;最后一种用法，比较简单，但也非常常见。我的A模块与B模块是两个不相干的模块，但现在有个功能需要实现A向B传递数据，我们怎么做？暴力一点的人会说，模块都在同一个项目里，直接用A去调B吧！那如果不是同一个项目呢？这时肯定就会有人提出，那我们发一个Http请求吧。但是谁来保证这个请求一定能发送成功呢？如果要做失败重发，那不是还要多写一大堆逻辑？这个时候，消息队列也可以承担这个模块中间人的功能，A向消息队列写入数据，由B去消费，中间的担保人是消息队列，A B的模块都不需要额外添加功能，岂不美哉？"></a>&nbsp;&nbsp;&nbsp;&nbsp;最后一种用法，比较简单，但也非常常见。我的A模块与B模块是两个不相干的模块，但现在有个功能需要实现A向B传递数据，我们怎么做？暴力一点的人会说，模块都在同一个项目里，直接用A去调B吧！那如果不是同一个项目呢？这时肯定就会有人提出，那我们发一个Http请求吧。但是谁来保证这个请求一定能发送成功呢？如果要做失败重发，那不是还要多写一大堆逻辑？这个时候，消息队列也可以承担这个模块中间人的功能，A向消息队列写入数据，由B去消费，中间的担保人是消息队列，A B的模块都不需要额外添加功能，岂不美哉？</h5><h5 id="nbsp-nbsp-nbsp-nbsp-讲了这么多消息队列的用法，我们来看一看-Kafka-是个什么东西。"><a href="#nbsp-nbsp-nbsp-nbsp-讲了这么多消息队列的用法，我们来看一看-Kafka-是个什么东西。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;讲了这么多消息队列的用法，我们来看一看 Kafka 是个什么东西。"></a>&nbsp;&nbsp;&nbsp;&nbsp;讲了这么多消息队列的用法，我们来看一看 Kafka 是个什么东西。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-Kafka-is-used-for-building-real-time-data-pipelines-and-streaming-apps-It-is-horizontally-scalable-fault-tolerant-wicked-fast-and-runs-in-production-in-thousands-of-companies-这是-Kafka-官方对其的描述，Kafka-是一个实时的数据处理系统，它高可用，可横向扩展，速度非常之快。"><a href="#nbsp-nbsp-nbsp-nbsp-Kafka-is-used-for-building-real-time-data-pipelines-and-streaming-apps-It-is-horizontally-scalable-fault-tolerant-wicked-fast-and-runs-in-production-in-thousands-of-companies-这是-Kafka-官方对其的描述，Kafka-是一个实时的数据处理系统，它高可用，可横向扩展，速度非常之快。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;Kafka is used for building real-time data pipelines and streaming apps. It is horizontally scalable, fault-tolerant, wicked fast, and runs in production in thousands of companies. 这是 Kafka 官方对其的描述，Kafka 是一个实时的数据处理系统，它高可用，可横向扩展，速度非常之快。"></a>&nbsp;&nbsp;&nbsp;&nbsp;Kafka is used for building real-time data pipelines and streaming apps. It is horizontally scalable, fault-tolerant, wicked fast, and runs in production in thousands of companies. 这是 Kafka 官方对其的描述，Kafka 是一个实时的数据处理系统，它高可用，可横向扩展，速度非常之快。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-Kafka会对数据进行持久化存储，消费者端会记录一个offset，表明该消费者当前消费到哪条数据，所以下次消费者想继续消费，只需从offset-1的位置继续消费就好了。在-kafka-中，不同的消息队列可以被指定为不同的-topic-，topic-之间互相隔离，保证我的A-topic-的消费者不会跑到B-去消费数据。每个topic将被分成多个-partition-区-每个-partition-在存储层面是append-log文件。任何发布到此-partition-的消息都会被直接追加到log文件的尾部，每条消息在文件中的位置称为-offset（偏移量），offset-为一个long型数字，它是唯一标记一条消息。它唯一的标记一条消息。"><a href="#nbsp-nbsp-nbsp-nbsp-Kafka会对数据进行持久化存储，消费者端会记录一个offset，表明该消费者当前消费到哪条数据，所以下次消费者想继续消费，只需从offset-1的位置继续消费就好了。在-kafka-中，不同的消息队列可以被指定为不同的-topic-，topic-之间互相隔离，保证我的A-topic-的消费者不会跑到B-去消费数据。每个topic将被分成多个-partition-区-每个-partition-在存储层面是append-log文件。任何发布到此-partition-的消息都会被直接追加到log文件的尾部，每条消息在文件中的位置称为-offset（偏移量），offset-为一个long型数字，它是唯一标记一条消息。它唯一的标记一条消息。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;Kafka会对数据进行持久化存储，消费者端会记录一个offset，表明该消费者当前消费到哪条数据，所以下次消费者想继续消费，只需从offset+1的位置继续消费就好了。在 kafka 中，不同的消息队列可以被指定为不同的 topic ，topic 之间互相隔离，保证我的A topic 的消费者不会跑到B 去消费数据。每个topic将被分成多个 partition(区),每个 partition 在存储层面是append log文件。任何发布到此 partition 的消息都会被直接追加到log文件的尾部，每条消息在文件中的位置称为 offset（偏移量），offset 为一个long型数字，它是唯一标记一条消息。它唯一的标记一条消息。"></a>&nbsp;&nbsp;&nbsp;&nbsp;Kafka会对数据进行持久化存储，消费者端会记录一个offset，表明该消费者当前消费到哪条数据，所以下次消费者想继续消费，只需从offset+1的位置继续消费就好了。在 kafka 中，不同的消息队列可以被指定为不同的 topic ，topic 之间互相隔离，保证我的A topic 的消费者不会跑到B 去消费数据。每个topic将被分成多个 partition(区),每个 partition 在存储层面是append log文件。任何发布到此 partition 的消息都会被直接追加到log文件的尾部，每条消息在文件中的位置称为 offset（偏移量），offset 为一个long型数字，它是唯一标记一条消息。它唯一的标记一条消息。</h5><h5 id="nbsp-nbsp-nbsp-nbsp-partitions的设计目的有多个-最根本原因是kafka基于文件存储-通过分区-可以将日志内容分散到多个server上-来避免文件尺寸达到单机磁盘的上限-每个partiton都会被当前server-kafka实例-保存-可以将一个topic切分多任意多个partitions-来消息保存-消费的效率-此外越多的partitions意味着可以容纳更多的consumer-有效提升并发消费的能力"><a href="#nbsp-nbsp-nbsp-nbsp-partitions的设计目的有多个-最根本原因是kafka基于文件存储-通过分区-可以将日志内容分散到多个server上-来避免文件尺寸达到单机磁盘的上限-每个partiton都会被当前server-kafka实例-保存-可以将一个topic切分多任意多个partitions-来消息保存-消费的效率-此外越多的partitions意味着可以容纳更多的consumer-有效提升并发消费的能力" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;partitions的设计目的有多个.最根本原因是kafka基于文件存储.通过分区,可以将日志内容分散到多个server上,来避免文件尺寸达到单机磁盘的上限,每个partiton都会被当前server(kafka实例)保存;可以将一个topic切分多任意多个partitions,来消息保存/消费的效率.此外越多的partitions意味着可以容纳更多的consumer,有效提升并发消费的能力."></a>&nbsp;&nbsp;&nbsp;&nbsp;partitions的设计目的有多个.最根本原因是kafka基于文件存储.通过分区,可以将日志内容分散到多个server上,来避免文件尺寸达到单机磁盘的上限,每个partiton都会被当前server(kafka实例)保存;可以将一个topic切分多任意多个partitions,来消息保存/消费的效率.此外越多的partitions意味着可以容纳更多的consumer,有效提升并发消费的能力.</h5><h5 id="nbsp-nbsp-nbsp-nbsp-在-python-中，我们连接-kafka-一般是这样的："><a href="#nbsp-nbsp-nbsp-nbsp-在-python-中，我们连接-kafka-一般是这样的：" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;在 python 中，我们连接 kafka 一般是这样的："></a>&nbsp;&nbsp;&nbsp;&nbsp;在 python 中，我们连接 kafka 一般是这样的：</h5><h5 id="nbsp-nbsp-nbsp-nbsp-生产者"><a href="#nbsp-nbsp-nbsp-nbsp-生产者" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;生产者"></a>&nbsp;&nbsp;&nbsp;&nbsp;生产者</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> kafka <span class="keyword">import</span> KafkaProducer</span><br><span class="line"></span><br><span class="line">producer = KafkaProducer(bootstrap_servers=[<span class="string">'localhost:9092'</span>])</span><br><span class="line">future = producer.send(<span class="string">'my_topic'</span> , key= <span class="string">b'my_key'</span>, value= <span class="string">b'my_value'</span>, partition= <span class="number">0</span>)</span><br><span class="line">result = future.get(timeout= <span class="number">10</span>)</span><br><span class="line">print(result)</span><br></pre></td></tr></table></figure>
+
+<h5 id="nbsp-nbsp-nbsp-nbsp-消费者"><a href="#nbsp-nbsp-nbsp-nbsp-消费者" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;消费者"></a>&nbsp;&nbsp;&nbsp;&nbsp;消费者</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> kafka <span class="keyword">import</span> KafkaConsumer</span><br><span class="line"></span><br><span class="line">consumer = KafkaConsumer(<span class="string">'my_topic'</span>, group_id= <span class="string">'group2'</span>, bootstrap_servers= [<span class="string">'localhost:9092'</span>])</span><br><span class="line"><span class="keyword">for</span> msg <span class="keyword">in</span> consumer:</span><br><span class="line">    print(msg)</span><br></pre></td></tr></table></figure>
+
+<h5 id="nbsp-nbsp-nbsp-nbsp-备注下，group-id这个东西，比较复杂，是kafka提供的可扩展且具有容错性的消费者机制组，以后的博文会专门讨论它。"><a href="#nbsp-nbsp-nbsp-nbsp-备注下，group-id这个东西，比较复杂，是kafka提供的可扩展且具有容错性的消费者机制组，以后的博文会专门讨论它。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;备注下，group_id这个东西，比较复杂，是kafka提供的可扩展且具有容错性的消费者机制组，以后的博文会专门讨论它。"></a>&nbsp;&nbsp;&nbsp;&nbsp;备注下，group_id这个东西，比较复杂，是kafka提供的可扩展且具有容错性的消费者机制组，以后的博文会专门讨论它。</h5>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/13/613/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -789,155 +934,11 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/04/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="水怪Water-Monster">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="水怪Water-Monster">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2020/06/04/hello-world/" itemprop="url">python yield</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-04T14:38:27+08:00">
-                2020-06-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-            <span class="post-category" >
-            
-              <span class="post-meta-divider">|</span>
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">In</span>
-              
-              
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/python-yield/" itemprop="url" rel="index">
-                    <span itemprop="name">python yield</span>
-                  </a>
-                </span>
-
-                
-                
-              
-            </span>
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h3 id="python-web-开发-经验知识分享"><a href="#python-web-开发-经验知识分享" class="headerlink" title="python web 开发 经验知识分享"></a>python web 开发 经验知识分享</h3><h3 id="api请求异步处理-之-yield"><a href="#api请求异步处理-之-yield" class="headerlink" title="api请求异步处理 之 yield"></a>api请求异步处理 之 yield</h3><h5 id="我们都知道，在python3-4引入-asyncio-模块，使用-async-await-关键字进行异步编程以前，我们的异步处理都要依赖关键字-yield-。"><a href="#我们都知道，在python3-4引入-asyncio-模块，使用-async-await-关键字进行异步编程以前，我们的异步处理都要依赖关键字-yield-。" class="headerlink" title="我们都知道，在python3.4引入 asyncio 模块，使用 async/await 关键字进行异步编程以前，我们的异步处理都要依赖关键字 yield 。"></a>我们都知道，在python3.4引入 asyncio 模块，使用 async/await 关键字进行异步编程以前，我们的异步处理都要依赖关键字 yield 。</h5><h5 id="使用-yield-编写异步的协程"><a href="#使用-yield-编写异步的协程" class="headerlink" title="使用 yield 编写异步的协程:"></a>使用 yield 编写异步的协程:</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func1</span><span class="params">()</span>:</span></span><br><span class="line">    a, b, c = <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span></span><br><span class="line">    <span class="keyword">yield</span> print(a)</span><br><span class="line">    <span class="keyword">yield</span> print(b)</span><br><span class="line">    <span class="keyword">yield</span> print(c)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">func2</span><span class="params">(func)</span>:</span></span><br><span class="line">    n = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>):</span><br><span class="line">        func.send(<span class="literal">None</span>)</span><br><span class="line">        n += <span class="number">1</span></span><br><span class="line">        print(n)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">produce</span><span class="params">()</span>:</span></span><br><span class="line">    a = func1()</span><br><span class="line">    func2(a)</span><br></pre></td></tr></table></figure>
-
-<h5 id="nbsp-nbsp-nbsp-nbsp-在这段代码中，我们可以看到，func1中的流程并未一次性走完，而是在第一次遇见-yield-关键字时停止了。func2走到第二次for循环时，再次调用-func-1的-send-方法，此时-func1-才继续开始执行，并且在下一个-yield-关键字处暂停执行。直到-func2-走到第三次循环时，func1-的流程才全部结束。"><a href="#nbsp-nbsp-nbsp-nbsp-在这段代码中，我们可以看到，func1中的流程并未一次性走完，而是在第一次遇见-yield-关键字时停止了。func2走到第二次for循环时，再次调用-func-1的-send-方法，此时-func1-才继续开始执行，并且在下一个-yield-关键字处暂停执行。直到-func2-走到第三次循环时，func1-的流程才全部结束。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;在这段代码中，我们可以看到，func1中的流程并未一次性走完，而是在第一次遇见 yield 关键字时停止了。func2走到第二次for循环时，再次调用 func 1的 send 方法，此时 func1 才继续开始执行，并且在下一个 yield 关键字处暂停执行。直到 func2 走到第三次循环时，func1 的流程才全部结束。"></a>&nbsp;&nbsp;&nbsp;&nbsp;在这段代码中，我们可以看到，func1中的流程并未一次性走完，而是在第一次遇见 yield 关键字时停止了。func2走到第二次for循环时，再次调用 func 1的 send 方法，此时 func1 才继续开始执行，并且在下一个 yield 关键字处暂停执行。直到 func2 走到第三次循环时，func1 的流程才全部结束。</h5><h5 id="在我们执行了这段代码后，结果是这样的："><a href="#在我们执行了这段代码后，结果是这样的：" class="headerlink" title="在我们执行了这段代码后，结果是这样的："></a>在我们执行了这段代码后，结果是这样的：</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    produce()</span><br><span class="line"></span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line"><span class="number">5</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line"><span class="number">6</span></span><br><span class="line"><span class="number">3</span></span><br></pre></td></tr></table></figure>
-<h5 id="nbsp-nbsp-nbsp-nbsp-我们可以看到-func1-的执行过程并不连续，print出的4，5，6三个数字夹杂在-func2-的循环中间。使用-yield-关键字我们可以把同步的代码改变为异步的，将一些耗时的操作（通常是各类I-O）交给yield-关键字，在再次需要调用到这些操作时，他们才会被执行。"><a href="#nbsp-nbsp-nbsp-nbsp-我们可以看到-func1-的执行过程并不连续，print出的4，5，6三个数字夹杂在-func2-的循环中间。使用-yield-关键字我们可以把同步的代码改变为异步的，将一些耗时的操作（通常是各类I-O）交给yield-关键字，在再次需要调用到这些操作时，他们才会被执行。" class="headerlink" title="&nbsp;&nbsp;&nbsp;&nbsp;我们可以看到 func1 的执行过程并不连续，print出的4，5，6三个数字夹杂在 func2 的循环中间。使用 yield 关键字我们可以把同步的代码改变为异步的，将一些耗时的操作（通常是各类I/O）交给yield 关键字，在再次需要调用到这些操作时，他们才会被执行。"></a>&nbsp;&nbsp;&nbsp;&nbsp;我们可以看到 func1 的执行过程并不连续，print出的4，5，6三个数字夹杂在 func2 的循环中间。使用 yield 关键字我们可以把同步的代码改变为异步的，将一些耗时的操作（通常是各类I/O）交给yield 关键字，在再次需要调用到这些操作时，他们才会被执行。</h5>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/">&lt;i class&#x3D;&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    <a class="extend prev" rel="prev" href="/">&lt;i class&#x3D;&quot;fa fa-angle-left&quot;&gt;&lt;&#x2F;i&gt;</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">&lt;i class&#x3D;&quot;fa fa-angle-right&quot;&gt;&lt;&#x2F;i&gt;</a>
   </nav>
 
 
@@ -983,7 +984,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -994,7 +995,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">10</span>
                   <span class="site-state-item-name">categories</span>
                 </a>
               </div>
