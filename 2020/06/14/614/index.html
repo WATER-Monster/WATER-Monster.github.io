@@ -403,17 +403,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -464,22 +455,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#web-开发-经验知识分享"><span class="nav-number">1.</span> <span class="nav-text">web 开发 经验知识分享</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kafka-相关"><span class="nav-number">2.</span> <span class="nav-text">kafka 相关</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-最近经常会被问到一个问题，为什么我们需要一个消息队列，消息队列它好在哪里？"><span class="nav-number">2.0.1.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;最近经常会被问到一个问题，为什么我们需要一个消息队列，消息队列它好在哪里？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-通常来说，消息队列可以应用于以下三个场景："><span class="nav-number">2.0.2.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;通常来说，消息队列可以应用于以下三个场景：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-1-解耦消息的生产和消费。"><span class="nav-number">2.1.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;1.解耦消息的生产和消费。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-2-缓冲。"><span class="nav-number">2.2.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;2.缓冲。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-3-不同模块之间的通讯。"><span class="nav-number">2.3.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;3.不同模块之间的通讯。</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-我们在涉及到邮件发送，短信发送这样的功能时，通常不会把它们就这么写进你的API逻辑内部。为什么？因为这类发布性质的功能写在API内部不仅会造成你的代码冗长，而且会拖累API的响应速度。那我们需要把它们写在哪？写一个脚本让API每次去调用吗？这样也行，但我们通常会采取更聪明的做法，那就是使用消息队列。我们在API内部向消息队列里“生产”我们需要做的发布类任务，把完成这一功能的实际代码写在一个循环中，循环读取消息队列内部被添加的任务，一旦读取到了，再去执行发布逻辑。这样的解耦，可以使我们的代码可读性更强，拆分性更好。"><span class="nav-number">2.3.1.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我们在涉及到邮件发送，短信发送这样的功能时，通常不会把它们就这么写进你的API逻辑内部。为什么？因为这类发布性质的功能写在API内部不仅会造成你的代码冗长，而且会拖累API的响应速度。那我们需要把它们写在哪？写一个脚本让API每次去调用吗？这样也行，但我们通常会采取更聪明的做法，那就是使用消息队列。我们在API内部向消息队列里“生产”我们需要做的发布类任务，把完成这一功能的实际代码写在一个循环中，循环读取消息队列内部被添加的任务，一旦读取到了，再去执行发布逻辑。这样的解耦，可以使我们的代码可读性更强，拆分性更好。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-消息队列的另一大用法，就是用来缓冲高发数据。想象一下，如果我们某个接口大量产生数据入库的请求，我们在同一时间内执行这些请求，将一大堆数据塞进数据库，数据库此时负荷的住吗？单机情况下可能就直接爆了，结果就是会有请求超时，数据无法入库的情况。这种情况下，我们就需要使用消息队列去“化峰”，将高峰请求量吞下来，再后续慢慢吐给数据库，这就是一个缓冲的过程。"><span class="nav-number">2.3.2.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;消息队列的另一大用法，就是用来缓冲高发数据。想象一下，如果我们某个接口大量产生数据入库的请求，我们在同一时间内执行这些请求，将一大堆数据塞进数据库，数据库此时负荷的住吗？单机情况下可能就直接爆了，结果就是会有请求超时，数据无法入库的情况。这种情况下，我们就需要使用消息队列去“化峰”，将高峰请求量吞下来，再后续慢慢吐给数据库，这就是一个缓冲的过程。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-最后一种用法，比较简单，但也非常常见。我的A模块与B模块是两个不相干的模块，但现在有个功能需要实现A向B传递数据，我们怎么做？暴力一点的人会说，模块都在同一个项目里，直接用A去调B吧！那如果不是同一个项目呢？这时肯定就会有人提出，那我们发一个Http请求吧。但是谁来保证这个请求一定能发送成功呢？如果要做失败重发，那不是还要多写一大堆逻辑？这个时候，消息队列也可以承担这个模块中间人的功能，A向消息队列写入数据，由B去消费，中间的担保人是消息队列，A-B的模块都不需要额外添加功能，岂不美哉？"><span class="nav-number">2.3.3.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;最后一种用法，比较简单，但也非常常见。我的A模块与B模块是两个不相干的模块，但现在有个功能需要实现A向B传递数据，我们怎么做？暴力一点的人会说，模块都在同一个项目里，直接用A去调B吧！那如果不是同一个项目呢？这时肯定就会有人提出，那我们发一个Http请求吧。但是谁来保证这个请求一定能发送成功呢？如果要做失败重发，那不是还要多写一大堆逻辑？这个时候，消息队列也可以承担这个模块中间人的功能，A向消息队列写入数据，由B去消费，中间的担保人是消息队列，A B的模块都不需要额外添加功能，岂不美哉？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-讲了这么多消息队列的用法，我们来看一看-Kafka-是个什么东西。"><span class="nav-number">2.3.4.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;讲了这么多消息队列的用法，我们来看一看 Kafka 是个什么东西。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-Kafka-is-used-for-building-real-time-data-pipelines-and-streaming-apps-It-is-horizontally-scalable-fault-tolerant-wicked-fast-and-runs-in-production-in-thousands-of-companies-这是-Kafka-官方对其的描述，Kafka-是一个实时的数据处理系统，它高可用，可横向扩展，速度非常之快。"><span class="nav-number">2.3.5.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Kafka is used for building real-time data pipelines and streaming apps. It is horizontally scalable, fault-tolerant, wicked fast, and runs in production in thousands of companies. 这是 Kafka 官方对其的描述，Kafka 是一个实时的数据处理系统，它高可用，可横向扩展，速度非常之快。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-Kafka会对数据进行持久化存储，消费者端会记录一个offset，表明该消费者当前消费到哪条数据，所以下次消费者想继续消费，只需从offset-1的位置继续消费就好了。在-kafka-中，不同的消息队列可以被指定为不同的-topic-，topic-之间互相隔离，保证我的A-topic-的消费者不会跑到B-去消费数据。每个topic将被分成多个-partition-区-每个-partition-在存储层面是append-log文件。任何发布到此-partition-的消息都会被直接追加到log文件的尾部，每条消息在文件中的位置称为-offset（偏移量），offset-为一个long型数字，它是唯一标记一条消息。它唯一的标记一条消息。"><span class="nav-number">2.3.6.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;Kafka会对数据进行持久化存储，消费者端会记录一个offset，表明该消费者当前消费到哪条数据，所以下次消费者想继续消费，只需从offset+1的位置继续消费就好了。在 kafka 中，不同的消息队列可以被指定为不同的 topic ，topic 之间互相隔离，保证我的A topic 的消费者不会跑到B 去消费数据。每个topic将被分成多个 partition(区),每个 partition 在存储层面是append log文件。任何发布到此 partition 的消息都会被直接追加到log文件的尾部，每条消息在文件中的位置称为 offset（偏移量），offset 为一个long型数字，它是唯一标记一条消息。它唯一的标记一条消息。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-partitions的设计目的有多个-最根本原因是kafka基于文件存储-通过分区-可以将日志内容分散到多个server上-来避免文件尺寸达到单机磁盘的上限-每个partiton都会被当前server-kafka实例-保存-可以将一个topic切分多任意多个partitions-来消息保存-消费的效率-此外越多的partitions意味着可以容纳更多的consumer-有效提升并发消费的能力"><span class="nav-number">2.3.7.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;partitions的设计目的有多个.最根本原因是kafka基于文件存储.通过分区,可以将日志内容分散到多个server上,来避免文件尺寸达到单机磁盘的上限,每个partiton都会被当前server(kafka实例)保存;可以将一个topic切分多任意多个partitions,来消息保存&#x2F;消费的效率.此外越多的partitions意味着可以容纳更多的consumer,有效提升并发消费的能力.</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-在-python-中，我们连接-kafka-一般是这样的："><span class="nav-number">2.3.8.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在 python 中，我们连接 kafka 一般是这样的：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-生产者"><span class="nav-number">2.3.9.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;生产者</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-消费者"><span class="nav-number">2.3.10.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;消费者</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-备注下，group-id这个东西，比较复杂，是kafka提供的可扩展且具有容错性的消费者机制组，以后的博文会专门讨论它。"><span class="nav-number">2.3.11.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;备注下，group_id这个东西，比较复杂，是kafka提供的可扩展且具有容错性的消费者机制组，以后的博文会专门讨论它。</span></a></li></ol></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

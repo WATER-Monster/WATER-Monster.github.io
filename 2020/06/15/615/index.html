@@ -401,17 +401,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -462,22 +453,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#python-web-开发-经验知识分享"><span class="nav-number">1.</span> <span class="nav-text">python web 开发 经验知识分享</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#普通线程锁与递归锁"><span class="nav-number">2.</span> <span class="nav-text">普通线程锁与递归锁</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-python-在-threading-模块中，为我们提供了一个简单的线程锁："><span class="nav-number">2.0.1.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;python 在 threading 模块中，为我们提供了一个简单的线程锁：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-线程锁可以在我们多线程执行任务的时候，保证当前线程的公共资源不会被其他线程抢占，这是我们解决多线程资源掠夺的主要手段。"><span class="nav-number">2.0.2.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;线程锁可以在我们多线程执行任务的时候，保证当前线程的公共资源不会被其他线程抢占，这是我们解决多线程资源掠夺的主要手段。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-但是现在有一个问题，我的一个锁内的逻辑还需要调用一个别的模块，该模块中同样申请了锁，即我需要一个锁中锁，普通的-threading-Lock-是无法解决这个问题的，因为如果你不释放锁，你是不能再次-acquire-的。这时就需要用到另一种锁了，我们管他叫递归锁，也叫可重入锁。"><span class="nav-number">2.0.3.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;但是现在有一个问题，我的一个锁内的逻辑还需要调用一个别的模块，该模块中同样申请了锁，即我需要一个锁中锁，普通的 threading.Lock() 是无法解决这个问题的，因为如果你不释放锁，你是不能再次 acquire() 的。这时就需要用到另一种锁了，我们管他叫递归锁，也叫可重入锁。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-RLock允许在同一线程中被多次acquire，每次-acquire-都必须有一次对应的-release-释放，少一个-release-就不能释放锁，多一个-release-就会报一个异常，告诉你无法释放一个未加锁的对象。"><span class="nav-number">2.0.4.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;RLock允许在同一线程中被多次acquire，每次 acquire 都必须有一次对应的 release 释放，少一个 release 就不能释放锁，多一个 release 就会报一个异常，告诉你无法释放一个未加锁的对象。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-递归锁可以解决我们需要用到锁中锁的场景，当然-threading-模块中还有个更加高级的-Condition-加锁，这个我们之后会说。"><span class="nav-number">2.0.5.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;递归锁可以解决我们需要用到锁中锁的场景，当然 threading 模块中还有个更加高级的 Condition 加锁，这个我们之后会说。</span></a></li></ol></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

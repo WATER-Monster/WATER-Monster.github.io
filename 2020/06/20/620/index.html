@@ -401,17 +401,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -462,22 +453,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-我们普通业务流程下使用-token-对用户的登陆进行验证，jwt-内部也有非常简单便利的-jwt-生成-token-的方法。但直接传递-token，在某些业务背景下是非常不安全的，因为会被第三方直接截取，得到你的-token。所以在安全性需求高的接口中，使用-token-进行直接校验是不可取的。"><span class="nav-number">1.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我们普通业务流程下使用 token 对用户的登陆进行验证，jwt 内部也有非常简单便利的 jwt 生成 token 的方法。但直接传递 token，在某些业务背景下是非常不安全的，因为会被第三方直接截取，得到你的 token。所以在安全性需求高的接口中，使用 token 进行直接校验是不可取的。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-那么这种情况下，我们就需要用到非对称加密了，其实已经到了用非对称加密的程度的话，直接用-https-能解决很多问题。不过，ssl证书是要钱的嘛，我们只希望保证会话安全的情况下，还是自己做一步非对称加密好了。jwt-内部为我们提供了-rsa-加密的算法，即非对称加密的算法，使用起来也很简单："><span class="nav-number">2.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;那么这种情况下，我们就需要用到非对称加密了，其实已经到了用非对称加密的程度的话，直接用 https 能解决很多问题。不过，ssl证书是要钱的嘛，我们只希望保证会话安全的情况下，还是自己做一步非对称加密好了。jwt 内部为我们提供了 rsa 加密的算法，即非对称加密的算法，使用起来也很简单：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-这里简单讲下非对称加密的原理，非对称加密算法需要两个密钥：公开密钥（publickey）和私有密钥（privatekey）。公开密钥与私有密钥是一对，如果用公开密钥对数据进行加密，只有用对应的私有密钥才能解密；如果用私有密钥对数据进行加密，那么只有用对应的公开密钥才能解密。我们手上有一对密钥，在向客户端发送数据时发送公钥，客户端的数据使用公钥加密，传输给服务器端，服务器端使用私钥解密。私钥只有我们自己知道，传输过程即使被劫持，劫持者没有私钥，也无法解密请求的内容。"><span class="nav-number">3.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这里简单讲下非对称加密的原理，非对称加密算法需要两个密钥：公开密钥（publickey）和私有密钥（privatekey）。公开密钥与私有密钥是一对，如果用公开密钥对数据进行加密，只有用对应的私有密钥才能解密；如果用私有密钥对数据进行加密，那么只有用对应的公开密钥才能解密。我们手上有一对密钥，在向客户端发送数据时发送公钥，客户端的数据使用公钥加密，传输给服务器端，服务器端使用私钥解密。私钥只有我们自己知道，传输过程即使被劫持，劫持者没有私钥，也无法解密请求的内容。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-很多人对非对称加密一知半解，以为它的实现是依靠代码设计上实现用双重密钥进行加解密的，但其实非对称加密的原理与计算机科学没有一丝一毫的瓜葛，它是纯数学领域实现的。有兴趣的朋友可以参考这篇文章-https-www-jianshu-com-p-ad3d1dea63af-，这位作者对它的原理讲解的很细致。"><span class="nav-number">4.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;很多人对非对称加密一知半解，以为它的实现是依靠代码设计上实现用双重密钥进行加解密的，但其实非对称加密的原理与计算机科学没有一丝一毫的瓜葛，它是纯数学领域实现的。有兴趣的朋友可以参考这篇文章 https:&#x2F;&#x2F;www.jianshu.com&#x2F;p&#x2F;ad3d1dea63af ，这位作者对它的原理讲解的很细致。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-如果想要自己做非对称加密，就需要自己使用-openssl-开源库来生成一对自己的公钥私钥，是的，上面的那对公钥和私钥可不是随便乱填一下就行了的。openssl-的安装与使用这里也不再多讲，按照网上的流程一步一步来就可以了。"><span class="nav-number">5.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;如果想要自己做非对称加密，就需要自己使用 openssl 开源库来生成一对自己的公钥私钥，是的，上面的那对公钥和私钥可不是随便乱填一下就行了的。openssl 的安装与使用这里也不再多讲，按照网上的流程一步一步来就可以了。</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

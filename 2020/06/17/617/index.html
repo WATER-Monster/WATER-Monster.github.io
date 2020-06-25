@@ -399,17 +399,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -460,22 +451,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-我们都知道对索引的优化是-MySQL-优化中相当重要的一环，但很多人对索引的理解其实都很浅，认为它就是一个目标数据的导航，认为无论什么样的查询速度慢，只要加个索引就能解决。我们今天就来讨论下，MySQL-索引优化相关的一些重要的点。"><span class="nav-number">1.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我们都知道对索引的优化是 MySQL 优化中相当重要的一环，但很多人对索引的理解其实都很浅，认为它就是一个目标数据的导航，认为无论什么样的查询速度慢，只要加个索引就能解决。我们今天就来讨论下，MySQL 索引优化相关的一些重要的点。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-1-索引的缺点，为什么不能盲目的建立索引。"><span class="nav-number">2.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;1.索引的缺点，为什么不能盲目的建立索引。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-索引可以大幅提高我们针对索引字段的查找效率，但我们要知道，MySQL-在插入和更新以及删除数据时，同样也需要维护表内的索引。如果你的索引过多，一些不频繁查询的字段也加了索引，就会在插入和更新的时候吃苦头。并且索引其实也是张表，也要占磁盘空间，大量的数据配上大量的索引会急剧增大磁盘的占用量。"><span class="nav-number">3.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; 索引可以大幅提高我们针对索引字段的查找效率，但我们要知道，MySQL 在插入和更新以及删除数据时，同样也需要维护表内的索引。如果你的索引过多，一些不频繁查询的字段也加了索引，就会在插入和更新的时候吃苦头。并且索引其实也是张表，也要占磁盘空间，大量的数据配上大量的索引会急剧增大磁盘的占用量。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-2-表之间-join-的时候怎么建立索引？"><span class="nav-number">4.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;2.表之间 join 的时候怎么建立索引？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-如果我们使用-jion-查询表关联数据，而关联字段在左表和右表内都未建立索引，那么我们需要怎样为该字段建立索引，给左表的字段建立？还是给右表的字段建立？或者两个表都建立一个该字段的索引？我们知道-left-join-是左表的全有数据加右表的匹配数据，right-join-则相反，是右表的全有数据加左表的匹配数据。所以我们给-join-查询建立索引的时候，左查询需要给右表字段建立索引，右查询给左表字段建立索引，在-join-查询里给左表或者右表的全有数据加索引是毫无意义的，因为这些全有数据最终都需要提取出来，而另一表的匹配数据如果有索引则能更快定位。"><span class="nav-number">5.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;如果我们使用 jion 查询表关联数据，而关联字段在左表和右表内都未建立索引，那么我们需要怎样为该字段建立索引，给左表的字段建立？还是给右表的字段建立？或者两个表都建立一个该字段的索引？我们知道 left join 是左表的全有数据加右表的匹配数据，right join 则相反，是右表的全有数据加左表的匹配数据。所以我们给 join 查询建立索引的时候，左查询需要给右表字段建立索引，右查询给左表字段建立索引，在 join 查询里给左表或者右表的全有数据加索引是毫无意义的，因为这些全有数据最终都需要提取出来，而另一表的匹配数据如果有索引则能更快定位。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-3-联合索引怎么建立，联合索引怎么使用？"><span class="nav-number">6.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;3.联合索引怎么建立，联合索引怎么使用？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-在实际业务场景中我们经常会遇到一条查询语句需要对多个字段做筛选的情况，而MySQL在一次查询中只能使用一个索引。这时候我们对单个字段建立的索引就无法覆盖到我们业务中涉及到的所有字段，这条查询语句要优化，就需要建立联合索引。联合索引的建立方式其实很简单，create-index-on-table-col1-col2-col3-即可。联合索引的使用需要遵守一个很重要的原则：查询从索引的最左前列开始且不能跳过索引中的列。这是什么意思呢？我们的语句按-create-index-on-table-col1-col2-col3-建立的联合索引，在-where-后跟-col1-可以走到索引，跟-col1，col2也可以走到索引，跟-col2，-col3-不能走到索引，跟-col1，col3-只能走到-col1-的部分索引。联合索引怎么建立的，就要按怎么样的字段顺序来，从左至右，中间的字段断了缺了都只能走到部分索引，即左边开始按顺序来的字段的有效索引，从断掉的部分开始，后续字段的索引一概用不到。"><span class="nav-number">7.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在实际业务场景中我们经常会遇到一条查询语句需要对多个字段做筛选的情况，而MySQL在一次查询中只能使用一个索引。这时候我们对单个字段建立的索引就无法覆盖到我们业务中涉及到的所有字段，这条查询语句要优化，就需要建立联合索引。联合索引的建立方式其实很简单，create index on table(col1,col2,col3),即可。联合索引的使用需要遵守一个很重要的原则：查询从索引的最左前列开始且不能跳过索引中的列。这是什么意思呢？我们的语句按 create index on table(col1,col2,col3) 建立的联合索引，在 where 后跟 col1 可以走到索引，跟 col1，col2也可以走到索引，跟 col2， col3 不能走到索引，跟 col1，col3 只能走到 col1 的部分索引。联合索引怎么建立的，就要按怎么样的字段顺序来，从左至右，中间的字段断了缺了都只能走到部分索引，即左边开始按顺序来的字段的有效索引，从断掉的部分开始，后续字段的索引一概用不到。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-4-不要在索引的字段上做操作。"><span class="nav-number">8.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;4.不要在索引的字段上做操作。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-这句话是什么意思呢，假设我的-col1-是有索引的字段，但我的-sql-语句是这么写的：select-col1-from-table-where-LCASE-col1-‘xxx’。这样的-sql-语句的-col1-列的索引是无效的，MySQL这时会走全表扫描。"><span class="nav-number">9.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这句话是什么意思呢，假设我的 col1 是有索引的字段，但我的 sql 语句是这么写的：select col1 from table where LCASE(col1) &#x3D; ‘xxx’。这样的 sql 语句的 col1 列的索引是无效的，MySQL这时会走全表扫描。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-5-少使用-‘-gt-lt-’-这类的操作符。"><span class="nav-number">10.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;5.少使用 ‘&gt; &lt; !&#x3D;’ 这类的操作符。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-涉及到范围查询的时候，单个字段的索引通常不会有太大问题，但是对于联合索引，即便你遵循了联合索引的最左原则（就是上面讲的），遇到比较类操作符的时候，做比较类操作的字段的后续字段的索引会全部失效。仍然以上面我们的联合索引-create-index-on-table-col1-col2-col3-为例，如果我们的-sql-后段是-where-col1-‘xxx’-and-col2-gt-‘xxx’-and-col3-‘xxx’，那么从-col3-开始，包括-col3-本身，他们的索引是用不到的。在使用联合索引的时候，一定要留意你的范围查找操作，必要的时候可以置换联合索引顺序，将你必须要使用范围查询的字段放在联合索引的最后。"><span class="nav-number">11.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;涉及到范围查询的时候，单个字段的索引通常不会有太大问题，但是对于联合索引，即便你遵循了联合索引的最左原则（就是上面讲的），遇到比较类操作符的时候，做比较类操作的字段的后续字段的索引会全部失效。仍然以上面我们的联合索引 create index on table(col1,col2,col3) 为例，如果我们的 sql 后段是 where col1 &#x3D; ‘xxx’ and col2 &gt; ‘xxx’ and col3 &#x3D; ‘xxx’，那么从 col3 开始，包括 col3 本身，他们的索引是用不到的。在使用联合索引的时候，一定要留意你的范围查找操作，必要的时候可以置换联合索引顺序，将你必须要使用范围查询的字段放在联合索引的最后。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-6-like通配符以-开头无法走到索引。什么是覆盖索引。"><span class="nav-number">12.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;6.like通配符以%开头无法走到索引。什么是覆盖索引。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-这个其实绝大多数人都知道，模糊匹配如果直接以-开头匹配是走不到索引的。不过其实有一个解决方案，就是使用覆盖索引。什么叫覆盖索引？就是指一个查询语句的执行只用从索引中就能够取得，不必从数据表中读取，比如-select-col1，-col2-from-table-where-col1-xxx-and-col2-like-‘-xx-’，如果我们像上述那样有col1，-col2，-col3-的联合索引在，那么这条语句就可以走到覆盖索引，即便我们的-col2-模糊查询是从-开始匹配的，它的查询也能被我们的联合索引所覆盖。"><span class="nav-number">13.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这个其实绝大多数人都知道，模糊匹配如果直接以 % 开头匹配是走不到索引的。不过其实有一个解决方案，就是使用覆盖索引。什么叫覆盖索引？就是指一个查询语句的执行只用从索引中就能够取得，不必从数据表中读取，比如 select col1， col2 from table where col1 &#x3D; xxx and col2 like ‘%xx%’，如果我们像上述那样有col1， col2， col3 的联合索引在，那么这条语句就可以走到覆盖索引，即便我们的 col2 模糊查询是从 % 开始匹配的，它的查询也能被我们的联合索引所覆盖。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-索引的优化其实还远不止这些，我会慢慢的在以后的博客里讨论到。"><span class="nav-number">14.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;索引的优化其实还远不止这些，我会慢慢的在以后的博客里讨论到。</span></a></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

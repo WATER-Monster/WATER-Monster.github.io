@@ -398,17 +398,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -459,22 +450,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#python-web-开发-经验知识分享"><span class="nav-number">1.</span> <span class="nav-text">python web 开发 经验知识分享</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#api请求异步处理-之-yield"><span class="nav-number">2.</span> <span class="nav-text">api请求异步处理 之 yield</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#我们都知道，在python3-4引入-asyncio-模块，使用-async-await-关键字进行异步编程以前，我们的异步处理都要依赖关键字-yield-。"><span class="nav-number">2.0.1.</span> <span class="nav-text">我们都知道，在python3.4引入 asyncio 模块，使用 async&#x2F;await 关键字进行异步编程以前，我们的异步处理都要依赖关键字 yield 。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用-yield-编写异步的协程"><span class="nav-number">2.0.2.</span> <span class="nav-text">使用 yield 编写异步的协程:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-在这段代码中，我们可以看到，func1中的流程并未一次性走完，而是在第一次遇见-yield-关键字时停止了。func2走到第二次for循环时，再次调用-func-1的-send-方法，此时-func1-才继续开始执行，并且在下一个-yield-关键字处暂停执行。直到-func2-走到第三次循环时，func1-的流程才全部结束。"><span class="nav-number">2.0.3.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;在这段代码中，我们可以看到，func1中的流程并未一次性走完，而是在第一次遇见 yield 关键字时停止了。func2走到第二次for循环时，再次调用 func 1的 send 方法，此时 func1 才继续开始执行，并且在下一个 yield 关键字处暂停执行。直到 func2 走到第三次循环时，func1 的流程才全部结束。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#在我们执行了这段代码后，结果是这样的："><span class="nav-number">2.0.4.</span> <span class="nav-text">在我们执行了这段代码后，结果是这样的：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-我们可以看到-func1-的执行过程并不连续，print出的4，5，6三个数字夹杂在-func2-的循环中间。使用-yield-关键字我们可以把同步的代码改变为异步的，将一些耗时的操作（通常是各类I-O）交给yield-关键字，在再次需要调用到这些操作时，他们才会被执行。"><span class="nav-number">2.0.5.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我们可以看到 func1 的执行过程并不连续，print出的4，5，6三个数字夹杂在 func2 的循环中间。使用 yield 关键字我们可以把同步的代码改变为异步的，将一些耗时的操作（通常是各类I&#x2F;O）交给yield 关键字，在再次需要调用到这些操作时，他们才会被执行。</span></a></li></ol></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

@@ -399,17 +399,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -460,22 +451,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#web-开发-经验知识分享"><span class="nav-number">1.</span> <span class="nav-text">web 开发 经验知识分享</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#kafka-相关"><span class="nav-number">2.</span> <span class="nav-text">kafka 相关</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-之前我们聊了聊消息队列是做什么用的，然后聊了下-kafka-是个什么东西，那今天我们就来详细的聊下，kafka-的-group-是用来做什么的。"><span class="nav-number">2.0.1.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;之前我们聊了聊消息队列是做什么用的，然后聊了下 kafka 是个什么东西，那今天我们就来详细的聊下，kafka 的 group 是用来做什么的。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-我们前面说到，kafka-的一个-topic-可以配置多个-partition，不同的-partition-可以放在不同的-kafka-server-上，这样的机制保证了-kafka-可以很方便的做分布式化，横向扩展。那么我的一个-consumer-消费者，从不同的-partition-上，就可以接收到-topic-内的全部消息，但现在有一个问题，如果我有三个-consumer-实例，我会消费到多少条消息呢？topic-内消息总数乘以-3-吗？显然不会，我的三个实例应该是同一个处理逻辑，那不是同一个消息被我处理了三次？所以真实情况是我的三个实例总共消费了一整份-topic-内的消息，而不应该是三整份。"><span class="nav-number">2.0.2.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我们前面说到，kafka 的一个 topic 可以配置多个 partition，不同的 partition 可以放在不同的 kafka server 上，这样的机制保证了 kafka 可以很方便的做分布式化，横向扩展。那么我的一个 consumer 消费者，从不同的 partition 上，就可以接收到 topic 内的全部消息，但现在有一个问题，如果我有三个 consumer 实例，我会消费到多少条消息呢？topic 内消息总数乘以 3 吗？显然不会，我的三个实例应该是同一个处理逻辑，那不是同一个消息被我处理了三次？所以真实情况是我的三个实例总共消费了一整份 topic 内的消息，而不应该是三整份。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-现在又有一个问题来了，如果我的另一组实例，执行不同的逻辑，但也需要消费这一份-topic-内的消息，该怎么办，我这-topic-已经被前面的三个实例消费过了啊，放在其他的简易消息队列里，比如-redis-的消息队列，我消费完就该把-topic-内消费掉的消息删了。"><span class="nav-number">2.0.3.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;现在又有一个问题来了，如果我的另一组实例，执行不同的逻辑，但也需要消费这一份 topic 内的消息，该怎么办，我这 topic 已经被前面的三个实例消费过了啊，放在其他的简易消息队列里，比如 redis 的消息队列，我消费完就该把 topic 内消费掉的消息删了。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-kafka-的-group-就是解决上面这两个问题被设计出来的。在你指定你的头三个实例在同一个-group-下的时候，你的三个-consumer-是共同消费一整份消息的，不会出现我三个同样的-consumer-实例把同样的事情做了三次的情况。而你把后面那组实例放在另一个-group-里后，第二组实例的-consumer-也同样能消费掉一整份-topic-消息。"><span class="nav-number">2.0.4.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;kafka 的 group 就是解决上面这两个问题被设计出来的。在你指定你的头三个实例在同一个 group 下的时候，你的三个 consumer 是共同消费一整份消息的，不会出现我三个同样的 consumer 实例把同样的事情做了三次的情况。而你把后面那组实例放在另一个 group 里后，第二组实例的 consumer 也同样能消费掉一整份 topic 消息。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-这样-group-的作用就很明确了，如果说-topic-是消息的分组的话，group-就是你不同功能的-consumer-的分组。一组人干一件事，另一组人也可以用同样的-topic-干另一件事，双方消费消息是互不干涉的。"><span class="nav-number">2.0.5.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这样 group 的作用就很明确了，如果说 topic 是消息的分组的话，group 就是你不同功能的 consumer 的分组。一组人干一件事，另一组人也可以用同样的 topic 干另一件事，双方消费消息是互不干涉的。</span></a></li></ol></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       

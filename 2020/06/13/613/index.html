@@ -407,17 +407,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -468,22 +459,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#python-web-开发-经验知识分享"><span class="nav-number">1.</span> <span class="nav-text">python web 开发 经验知识分享</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#为什么-列表推导式-会比普通的-for循环-更快？"><span class="nav-number">2.</span> <span class="nav-text">为什么 列表推导式 会比普通的 for循环 更快？</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#我们都知道，python-的-for循环-的效率其实是相当慢的，在使用for生成一个列表时，使用列表推导式会比直接写一个for快很多，但是这是为什么呢？"><span class="nav-number">2.0.1.</span> <span class="nav-text">我们都知道，python 的 for循环 的效率其实是相当慢的，在使用for生成一个列表时，使用列表推导式会比直接写一个for快很多，但是这是为什么呢？</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-我们先来介绍下-python-的一个模块，dis模块。dis-模块可以对你的-python-程序进行反汇编，生成字节码指令，我们可以使用这个模块，我们可以写一个简单的函数，然后使用-dis模块来看一看一个python函数在被执行时到底做了哪些事。"><span class="nav-number">2.0.2.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我们先来介绍下 python 的一个模块，dis模块。dis 模块可以对你的 python 程序进行反汇编，生成字节码指令，我们可以使用这个模块，我们可以写一个简单的函数，然后使用 dis模块来看一看一个python函数在被执行时到底做了哪些事。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-这是-func1-在第七行走for循环时的字节码指令。"><span class="nav-number">2.0.3.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这是 func1 在第七行走for循环时的字节码指令。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-这是-func2-在第十四行列表推导式时的字节码指令。"><span class="nav-number">2.0.4.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这是 func2 在第十四行列表推导式时的字节码指令。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-我惊讶的发现，3-6的python在走列表推导式的时候甚至没有做-FOR-ITER-，即for循环迭代。我在这之前看到有人说过，‘python-在列表推导中直接使用了‘LIST-APPEND’这个字节码来实现-append-功能，效率相当的高。而在-for-循环中每次循环都要先载入-append-这个属性然后再-‘CALL-FUNCTION’一下。这样势必就会慢了很多。’-但他测试的版本应该是基于python2，现在看来在-python3-中列表推导式连自己-iter-一遍都不需要了，直接用源列表的-generater-生成自己的新列表。"><span class="nav-number">2.0.5.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;我惊讶的发现，3.6的python在走列表推导式的时候甚至没有做 FOR_ITER ，即for循环迭代。我在这之前看到有人说过，‘python 在列表推导中直接使用了‘LIST_APPEND’这个字节码来实现 append 功能，效率相当的高。而在 for 循环中每次循环都要先载入 append 这个属性然后再 ‘CALL_FUNCTION’一下。这样势必就会慢了很多。’ 但他测试的版本应该是基于python2，现在看来在 python3 中列表推导式连自己 iter 一遍都不需要了，直接用源列表的 generater 生成自己的新列表。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#nbsp-nbsp-nbsp-nbsp-这个结论目前还有待推敲，但我们可以知道，python3-在-python2-的基础上使用生成器改变了for循环确实带来了很大的变革。列表推导式的生成方式比直接写for循环的效率要高出很多，这恐怕不仅仅是-LIST-APPEND-这个层面上的区别，更是-python3-for循环遍历使用-generater-即生成器带来的优化。"><span class="nav-number">2.0.6.</span> <span class="nav-text">&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;这个结论目前还有待推敲，但我们可以知道，python3 在 python2 的基础上使用生成器改变了for循环确实带来了很大的变革。列表推导式的生成方式比直接写for循环的效率要高出很多，这恐怕不仅仅是 LIST_APPEND 这个层面上的区别，更是 python3 for循环遍历使用 generater 即生成器带来的优化。</span></a></li></ol></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
