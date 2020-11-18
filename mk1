@@ -1,0 +1,78 @@
+### 数据结构
+
+##### 堆实现
+
+```python
+class Heap:
+    """
+    最小堆 TODO 还有问题
+    """
+    def __init__(self):
+        self.heap = list()
+
+    def add(self, item):
+        self.heap.append(item)
+        item_index = len(self.heap) - 1
+
+        # parent_index = (item_index - 1) // 2
+        # 递归调用检查parent_index或循环检查parent_index均可
+        # 递归方式
+        self._shift_up(item_index)
+
+    def _shift_up(self, index):
+        """
+        加入堆底后需要自下而上递归
+        :param index:
+        :return:
+        """
+        if index > 0:
+            parent_index = (index - 1) // 2
+            if parent_index >= 0:
+                if self.heap[index] < self.heap[parent_index]:
+                    self._swap(index, parent_index)
+                    self._shift_up(parent_index)
+
+    def _shift_down(self, index):
+        """
+        弹出堆顶后需要自上而下递归
+        :param index:
+        :return:
+        """
+        child_left = index * 2 + 1
+        child_right = index * 2 + 2
+        if child_left <= len(self.heap) and self.heap[child_left] < self.heap[index]:
+            self._swap(index, child_left)
+            self._shift_down(child_left)
+        elif child_right <= len(self.heap) and self.heap[child_right] < self.heap[index]:
+            self._swap(index, child_right)
+            self._shift_down(child_right)
+
+    def _swap(self, index, parent_index):
+        self.heap[index], self.heap[parent_index] = self.heap[parent_index], self.heap[index]
+
+    def extract(self):
+        if len(self.heap) <= 0:
+            raise Exception("heap is null")
+
+        heap_head = self.heap[0]
+        self.heap[0] = self.heap[-1]
+        self.heap.pop(-1)
+        self._shift_down(0)
+
+        return heap_head
+
+if __name__ == '__main__':
+    h = Heap()
+    h.add(3)
+    h.add(1)
+    h.add(7)
+    h.add(88)
+    h.add(0)
+    h.add(55)
+    h.add(2)
+    h.extract()
+    h.extract()
+    h.extract()
+    print(h.heap)
+
+```
